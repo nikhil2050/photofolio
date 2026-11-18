@@ -1,0 +1,5 @@
+.agents/**
+documentation/mvp-roadmap.md
+documentation/phase-1-prompts.md
+documentation/supabase-setup.md
+supabase/.temp/**
