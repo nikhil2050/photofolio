@@ -380,3 +380,67 @@ When a future feature requires a new component or pattern:
 5. Use the updated system in the current feature and future screens.
 
 Never silently introduce a new palette, font, icon set, radius system, shadow style, or illustration language.
+
+---
+
+## 11. Phase 2 gallery-specific visual patterns
+
+These rules extend the shared system for Gallery Management & Client Delivery. They do not create a second visual identity.
+
+### Photographer gallery library
+
+- Use a photographic card grid rather than a dense file-manager table as the default view.
+- Each gallery card may show a cover image, title, optional client/event label, real ready-photo count, updated date and a restrained status label.
+- Do not show fabricated views, downloads, engagement or photo counts.
+- Keep card chrome quiet. Prefer subtle separators and consistent image ratios over heavy shadows.
+- Status must be communicated with text as well as any icon/colour. Avoid large colourful badges.
+
+### Gallery editor and uploads
+
+- Group editor tasks into Details, Photos and Sharing. Do not add navigation for features that do not exist.
+- Upload dropzones use a thin dashed border, one outline upload icon and short helper copy. Avoid full-panel gradients or oversized illustrations.
+- Upload rows should be compact and readable: small preview, filename, progress/status and one contextual action.
+- Use distinct but restrained visual states for uploading, processing, ready and failed. Progress must reflect real work; never animate a fake percentage.
+- Show retry actions beside failed items. Do not hide successful uploads because another file failed.
+- Selection toolbars should appear only when there is a selection. Keep bulk destructive actions visually separate and require confirmation.
+- Reordering must not rely only on drag-and-drop; provide a keyboard-accessible method.
+
+### Client gallery
+
+- Treat the client gallery as an editorial viewing surface, not another dashboard page.
+- Do not show the photographer's app sidebar, admin toolbar or SaaS-style analytics.
+- Place approved photographer identity, gallery title and optional context above or around the photographs with generous whitespace.
+- Keep the contact/booking action visible but secondary to the images.
+- Use two to four responsive columns depending on viewport width and image composition. Preserve source aspect ratios by default. Avoid aggressive cropping and never sacrifice important subjects to force a uniform tile system.
+- Use real image dimensions to reserve layout space. Lazy-load below-the-fold previews and keep loading placeholders neutral.
+- The lightbox should show one image with minimal controls. Keep close, previous, next and favourite actions accessible and keyboard-operable.
+- Do not add a download icon or control unless original downloads are actually implemented and authorised.
+
+### Password gate and sharing controls
+
+- Password gates should be visually quiet: photographer identity if approved, a clear title, one password field and one primary action.
+- Do not reveal private gallery details before access is verified.
+- In the photographer workspace, describe sharing access in plain language. Avoid exposing token hashes or technical identifiers.
+- Copy-link success should be a small confirmation, not a large modal.
+- Revocation and rotation controls belong in a clearly separated secondary/destructive area and require confirmation.
+
+### Favourites and inquiries
+
+- Use a simple outline heart for an unselected photo and a filled heart for selected state. Provide accessible labels; never rely on colour alone.
+- Keep favourite controls unobtrusive in the grid and clearly available in the lightbox.
+- Do not expose anonymous visitor identifiers or imply a known client identity unless the system actually has it.
+- Inquiry forms should be short and low-friction. Use clear labels and privacy copy without decorative consent controls.
+- Confirmation copy must describe what actually happened. Do not promise that an email was delivered unless email delivery is configured and verified.
+
+### Phase 2 visual quality checklist
+
+- [ ] Dashboard library uses real gallery data and has an intentional empty state.
+- [ ] Gallery cards do not show fabricated statistics.
+- [ ] Upload states distinguish upload completion from preview processing.
+- [ ] Failed uploads can be understood and retried.
+- [ ] Client page gives photographs more visual space than the application UI.
+- [ ] Photo aspect ratios are preserved unless a deliberate, safe crop is needed.
+- [ ] Lightbox controls are minimal, visible and keyboard accessible.
+- [ ] Password gate and unavailable states do not leak gallery details.
+- [ ] Contact CTA is clear but does not compete with photographs.
+- [ ] All Phase 2 screens reuse the central palette, typography, spacing and component system.

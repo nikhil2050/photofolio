@@ -1,177 +1,242 @@
-# AGENTS.md — Photofolio
+# AGENTS.md --- Photofolio
 
 ## 1. Project Overview
 
-- Project: Photofolio.
-- Architecture: Single-repository modular monolith.
-- Frontend and backend must reside in the same Next.js repository.
-- Goal: Enable photographers to create portfolios, deliver branded client galleries and generate new business inquiries.
-- Follow a simplicity-first, minimalistic, photography-focused product philosophy.
+-   **Project:** Photofolio --- Photographer Portfolio & Client Gallery Platform.
+-   **Architecture:** Single-repository modular monolith.
+-   **Repository:** Frontend and backend application code must remain in the same Next.js repository unless an explicit architecture decision changes this.
+-   **Goal:** Help photographers showcase their work, deliver branded client galleries, collect client selections and generate new business inquiries.
+-   **Product philosophy:** Simplicity-first, minimalistic, photography-focused and easy to understand.
+-   **Primary principle:** The interface should frame the photography, never compete with it.
 
 ## 2. Instructions for AI Coding Agents
 
-- Always inspect the existing codebase before making changes.
-- Read `AI_CONTEXT.md` before implementing any feature.
-- Read `.agents/skills/photofolio-visual-system/SKILL.md` before making UI or UX changes.
-- Never assume an existing feature, endpoint or component works without checking its implementation.
-- Reuse existing components, services, hooks and utilities wherever possible.
-- Avoid unnecessary dependencies and overengineering.
-- Do not introduce breaking changes without explaining them.
-- Never overwrite existing working functionality unnecessarily.
-- Ask for clarification when an important architectural decision is unclear.
+Before starting any task:
 
-## 3. Code Readability and Comments
+1.  Inspect the existing repository, relevant implementation and current Git changes.
+2.  Read `AI_CONTEXT.md` if it exists.
+3.  Read this file and follow the applicable project conventions.
+4.  For any visual or interaction work, read `.agents/skills/photofolio-visual-system/SKILL.md`.
+5.  Read the relevant phase prompt or feature specification if one exists.
+6.  Identify dependencies, affected modules, security implications and tests before editing.
 
-- Write clean, maintainable, beginner-friendly code.
-- Add meaningful comments explaining complex logic, business rules and architectural decisions.
-- Explain WHY something is implemented, not simply WHAT the code does.
-- Use descriptive variable, function, class and file names.
-- Avoid unnecessary comments and redundant documentation.
-- Keep functions small and focused.
-- Add JSDoc comments for important reusable functions and public interfaces.
-- Explain unfamiliar design patterns or advanced concepts where appropriate.
+General rules:
+
+-   Never assume a feature, endpoint, component or database policy exists or works without inspecting it.
+-   Reuse existing components, services, hooks, utilities and design tokens where appropriate.
+-   Avoid unnecessary dependencies, duplicated logic and overengineering.
+-   Do not replace working functionality or introduce breaking changes without explaining the reason and impact.
+-   Do not invent product requirements. If an important requirement or architectural decision is unclear, ask a focused question or document the assumption before proceeding.
+-   Do not claim that a task is complete until implementation and relevant checks have been performed.
+-   Do not silently discard unrelated user changes.
+
+## 3. Code Readability and Beginner-Friendly Explanations
+
+The project owner is learning the codebase. Write code that is
+understandable to a developer who is still building experience.
+
+-   Use clear, descriptive names for variables, functions, components, types and files.
+-   Add meaningful comments for complex logic, business rules, security decisions and non-obvious implementation choices.
+-   Explain **why** a decision is made, not merely what the next line does.
+-   Add JSDoc to important reusable functions and public interfaces when it improves understanding.
+-   Explain unfamiliar patterns or framework-specific behaviour in concise comments or the task summary.
+-   Keep functions and components focused and reasonably small.
+-   Avoid redundant comments that simply restate the code.
+-   Prefer straightforward solutions over clever abstractions.
+-   Do not add comments to every line; comment where the reasoning would otherwise be difficult to infer.
 
 ## 4. Architecture and Technology Rules
 
-- Use Next.js App Router with TypeScript.
-- Maintain a modular monolith architecture.
-- Keep UI, business logic and database access separated.
-- Use server-side operations for sensitive business logic.
-- Do not expose service-role credentials or private environment variables to the browser.
-- Use Supabase for authentication, PostgreSQL and object storage.
-- Use Zod for input validation.
-- Follow secure authentication, authorization and data-access practices.
-- Enforce Row Level Security (RLS) wherever applicable.
-- Do not duplicate business logic between UI and API layers.
+-   Use Next.js App Router with TypeScript, following the versions and conventions already established in the repository.
+-   Maintain a modular monolith: UI, application/business logic and data-access concerns must be separated within the same repository.
+-   Keep feature-specific code organised into clear modules. Avoid turning the application into a collection of unrelated global utilities.
+-   Use server-side operations for sensitive business logic and privileged data access.
+-   Use Supabase for authentication, PostgreSQL and object storage, unless the repository contains an explicitly approved change.
+-   Use Zod for validating untrusted input at appropriate boundaries.
+-   Keep shared TypeScript types and DTO/contracts in a clear, reusable location.
+-   Avoid duplicating business rules between UI, route handlers, server actions and data-access code.
+-   Choose Server Components by default; use Client Components only when browser interaction or client-side state requires them.
+-   Keep secrets and service-role credentials on the server. Never expose them through client bundles or public environment variables.
+-   Do not add a separate backend repository or microservice without an explicit architecture decision. Design module boundaries so extraction remains possible if future scale or team needs justify it.
 
-## 5. Project Documentation
+## 5. Data Access, Authentication and Security
 
-Maintain the following documentation files:
+-   Treat the server as the security boundary. Client-side checks improve UX but do not replace server-side authorization.
+-   Verify the authenticated user and their permissions for every protected operation.
+-   Enforce user-level data isolation in application logic and Supabase Row Level Security (RLS) policies.
+-   Enable and test RLS on tables exposed to application clients, using least-privilege policies.
+-   Never trust user IDs, ownership fields, prices, roles, file paths or permissions supplied by the client without server-side verification.
+-   Validate and normalize all untrusted input on the server.
+-   Use parameterized database access and safe query patterns.
+-   Protect original photographs from public access. Use private storage and appropriately scoped, expiring access mechanisms where required.
+-   Treat preview images as a separate controlled asset when the product requirements call for them.
+-   Check file type, size and upload permissions. Do not rely only on filename extensions or browser-side validation.
+-   Avoid logging passwords, tokens, private image URLs, personal client information or other secrets.
+-   Never commit credentials, private keys, production data or `.env` files.
+-   Keep environment variable examples documented with placeholder values only.
+-   Consider abuse prevention, rate limiting and safe error messages for public-facing endpoints and inquiry forms.
 
-### AI_CONTEXT.md
+## 6. Project Documentation
 
-Maintain a comprehensive project context document containing:
+Maintain these root-level documents:
 
-- Project overview and objectives.
-- Key files reference.
-- Technology stack and resources.
-- System topology and architecture.
-- Application module boundaries.
-- Database architecture and relationships.
-- Shared DTOs and TypeScript contracts.
-- Service communication patterns.
-- Quick start and setup instructions.
-- Environment variables.
-- Project structure.
-- Navigation structure.
-- Authentication and authorization flow.
-- State management.
-- API integration.
-- Theme and design system.
-- Key conventions.
-- Implementation status.
-- Completed, in-progress and blocked tasks.
-- Future phases and roadmap.
-- Known limitations and technical debt.
-- Testing strategy.
-- Deployment architecture.
+### `AI_CONTEXT.md`
 
-Only document features that exist or are explicitly planned. Clearly distinguish implementation status.
+Use this as the concise, current knowledge base for transferring project
+context between coding agents. Include, where relevant:
 
-### API.md
+-   Project overview, goals and product scope.
+-   Key files and important resources.
+-   Tech stack and version-sensitive setup notes.
+-   System topology and application architecture.
+-   Module boundaries and responsibilities.
+-   Database architecture, tables, relationships and important constraints.
+-   Shared DTOs, TypeScript contracts and validation schemas.
+-   Service communication and data-access patterns.
+-   Quick start, prerequisites and setup instructions.
+-   Environment variables and configuration.
+-   Project and source structure.
+-   Navigation and route structure.
+-   Authentication, authorization and session flow.
+-   State management conventions.
+-   API integration and endpoint references.
+-   Theme system and visual-design skill reference.
+-   Key coding conventions and architectural decisions.
+-   Implementation status: completed, in progress, blocked and planned.
+-   Known limitations, technical debt and unresolved decisions.
+-   Testing strategy and commands.
+-   Deployment and operational architecture.
+-   Current phase, next recommended task and roadmap for future phases.
 
-- Document all implemented API routes and endpoints.
-- Include HTTP method, endpoint, purpose and authentication requirements.
-- Document request parameters, headers and body.
-- Include response structures and status codes.
-- Document validation and error responses.
-- Include authorization and security requirements.
-- Keep documentation synchronized with actual implementation.
+Keep it useful for a new agent: concise summaries, links to source files and explicit status are preferable to copying large amounts of source code. Distinguish implemented behaviour from planned behaviour.
 
-### README.md
+### `API.md`
 
-- Maintain a root README.md.
-- Include project overview, prerequisites, installation, configuration and startup instructions.
-- Explain the project structure.
-- Include development, testing and build commands.
-- Document deployment instructions.
-- If the project is later split into independently deployable services, each service must have its own README.md.
+Document every implemented API endpoint, including:
 
-## 6. Documentation Accuracy and Auditing
+-   HTTP method and route.
+-   Purpose and owning module.
+-   Authentication and authorization requirements.
+-   Path parameters, query parameters and required headers.
+-   Request body schema and validation rules.
+-   Success response shape and relevant status codes.
+-   Error response shape and failure status codes.
+-   Side effects and relevant database/storage operations.
+-   Rate limits or other operational constraints, where implemented.
 
-- Documentation must reflect actual source code.
-- Never document an endpoint as implemented when it is only planned.
-- Audit AI_CONTEXT.md and API.md after significant architectural or functional changes.
-- Audit README.md whenever setup, dependencies or deployment instructions change.
-- Update documentation in the same task as the implementation.
-- Remove outdated or duplicated information.
-- Record blocked items and unresolved architectural decisions.
-- Use explicit status labels: PLANNED, IN_PROGRESS, BLOCKED, COMPLETED and DEPRECATED.
+Do not list planned endpoints as implemented. Mark planned endpoints clearly if they are useful to the roadmap. Update the document when endpoint behaviour or contracts change.
 
-## 7. UI/UX and Design Consistency
+### `README.md`
 
-- Before creating, reviewing, or modifying any UI, UX, route, component, form, dashboard, marketing page, onboarding flow, or client gallery, read and follow `.agents/skills/photofolio-visual-system/SKILL.md`.
-- Treat the Photofolio visual-system skill as the authoritative visual and interaction system.
-- Maintain consistent typography, spacing, colours, buttons, forms and navigation.
-- Prioritize minimalism, whitespace and photography.
-- Use reusable components instead of creating page-specific duplicates.
-- Ensure responsive layouts for mobile, tablet and desktop.
-- Follow accessibility best practices.
-- Avoid unnecessary animations, gradients and decorative elements.
+Maintain a root README with:
 
-## 8. Security and Privacy
+-   Product overview and current capabilities.
+-   Prerequisites.
+-   Installation and local setup.
+-   Environment configuration.
+-   Development, lint, type-check, test and build commands.
+-   High-level repository structure.
+-   Database migration and local development guidance.
+-   Deployment instructions and relevant operational notes.
 
-- Never commit secrets, API keys or credentials.
-- Validate all user input on the server.
-- Enforce user-level data isolation.
-- Protect original photographs from public access.
-- Use controlled previews and secure access policies.
-- Implement proper authentication and authorization.
-- Never trust client-side authorization alone.
-- Follow privacy and copyright requirements.
+This is currently a single-repository application, not a microservice system. Do not create per-service README files unless independently deployable services are introduced by an explicit architecture decision.
 
-## 9. Testing and Quality
+## 7. Documentation Accuracy and Auditing
 
-- Test every new feature before marking it complete.
-- Add unit and integration tests where appropriate.
-- Test API validation and error handling.
-- Test authentication and authorization boundaries.
-- Test database RLS policies and cross-user data isolation.
-- Verify responsive UI behaviour.
-- Run linting, type checking and production builds when applicable.
-- Report tests that were not executed.
+-   Source code, migrations, policies and tests are the source of truth for implemented behaviour.
+-   Update documentation in the same task as the implementation whenever architecture, setup, routes, data contracts, security or feature status changes.
+-   Audit `AI_CONTEXT.md`, `API.md` and `README.md` against the actual implementation after significant changes.
+-   Search the repository for the relevant routes, schemas, migrations, policies and components before documenting them.
+-   Remove stale, duplicated or unsupported statements.
+-   Never describe a planned feature as completed or an untested policy as secure.
+-   Record important assumptions, blockers, unresolved decisions and technical debt.
+-   Use these status labels consistently: `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `COMPLETED`, `DEPRECATED`.
+-   Keep context-transfer documentation concise enough that another agent can quickly understand the project and continue work.
 
-## 10. Implementation Workflow
+## 8. UI/UX and Visual Consistency
 
-For every feature:
+Before creating, reviewing or modifying any UI, UX, route, component,
+form, dashboard, marketing page, onboarding flow or client gallery:
 
-1. Inspect existing code and documentation.
-2. Understand dependencies and architectural boundaries.
-3. Identify files that need modification.
-4. Explain the proposed implementation briefly.
-5. Implement the feature.
-6. Add appropriate tests.
-7. Run relevant quality checks.
-8. Update AI_CONTEXT.md, API.md and README.md where applicable.
-9. Summarize modified files and implementation decisions.
-10. Clearly report completed work, outstanding issues and blockers.
+1.  Read `.agents/skills/photofolio-visual-system/SKILL.md`.
+2.  Follow its palette, typography, spacing, layout, component, interaction, responsive and accessibility rules.
+3.  Extend the existing design system instead of inventing a separate visual language.
 
-## 11. Context Transfer Between AI Agents
+Design principles:
 
-- Keep AI_CONTEXT.md concise, accurate and up to date.
-- Treat source code as the ultimate source of truth.
-- Update implementation status after every significant task.
-- Record important decisions and their reasoning.
-- Include the next recommended development task.
-- Ensure another coding agent can understand the project without relying on previous chat conversations.
+-   Minimalism, generous whitespace and photography-first presentation.
+-   Warm, restrained neutral colours with a sparing accent.
+-   Clear hierarchy and concise interface copy.
+-   Reusable components and consistent interaction patterns.
+-   Responsive behaviour across mobile, tablet and desktop.
+-   Accessible contrast, keyboard navigation, focus states, labels and meaningful alternative text.
+-   Subtle transitions only when they improve feedback or comprehension.
+-   Avoid unnecessary gradients, decorative illustrations, visual clutter, excessive shadows and gratuitous animation.
+-   Use real product photography or purposeful image placeholders; do not use generic stock imagery as decoration where it weakens the product experience.
 
-## 12. Important Development Principles
+Keep the photographer workspace efficient and the client gallery editorial, calm and image-led. They may have different layouts, but must share the same underlying design system.
 
-- Simplicity over unnecessary complexity.
-- Security over convenience.
-- Reusability over duplication.
-- Maintainability over shortcuts.
-- Consistent UX over isolated visual creativity.
-- Incremental development over implementing everything at once.
+## 9. Product and Feature Implementation
 
-Always preserve the existing architecture and follow the project roadmap unless explicitly instructed otherwise.
+-   Follow the approved phase scope and acceptance criteria.
+-   Build incrementally; do not implement future-phase functionality unless requested or required by an agreed dependency.
+-   Keep photographer-owned data and client-facing/public data boundaries explicit.
+-   Design gallery visibility, access controls, publication state and client access deliberately.
+-   Ensure actions such as upload, publish, favourite and inquiry submission provide clear loading, success and error feedback.
+-   Provide useful empty, loading, error and permission-denied states.
+-   Do not use fake data in production flows. Clearly label fixtures and mock data used for development or tests.
+-   Preserve original image quality and metadata requirements as defined by the feature specification; do not silently transform or discard originals.
+-   Consider performance for image-heavy pages, including responsive image delivery, lazy loading and pagination or progressive loading where appropriate.
+
+## 10. Testing and Quality
+
+-   Add or update tests for each meaningful feature.
+-   Test business logic and validation independently where practical.
+-   Test authentication and authorization boundaries, including cross-user access attempts.
+-   Test RLS policies and storage access policies against both allowed and denied cases.
+-   Test upload constraints, invalid inputs, failure handling and duplicate submissions where relevant.
+-   Test public/client gallery access according to its configured visibility and protection rules.
+-   Test responsive UI behaviour and important keyboard interactions.
+-   Run relevant linting, type checking, unit/integration tests and production builds.
+-   Report exactly which checks were run, which passed, which failed and which were not run.
+-   Never claim tests passed if they were not executed.
+
+## 11. Implementation Workflow
+
+For each task:
+
+1.  Inspect the repository, relevant code, documentation and current changes.
+2.  Read applicable project and visual-system instructions.
+3.  Confirm the task scope and acceptance criteria.
+4.  Identify affected modules, data changes, security risks and dependencies.
+5.  Briefly state the implementation approach and files expected to change.
+6.  Implement the smallest complete solution consistent with the architecture.
+7.  Add or update tests.
+8.  Run relevant quality and security checks.
+9.  Audit and update `AI_CONTEXT.md`, `API.md` and `README.md` where applicable.
+10. Summarize changed files, behaviour, decisions, test results and remaining issues.
+
+If blocked, explain the specific blocker and do not hide incomplete work
+behind placeholder success states.
+
+## 12. Context Transfer Between AI Agents
+
+-   Keep `AI_CONTEXT.md` current after significant work.
+-   Record decisions and the reasons behind them, especially decisions that are not obvious from code.
+-   Link to key implementation files rather than duplicating their contents.
+-   Record the current phase, completed acceptance criteria, in-progress work, blockers and next recommended task.
+-   Ensure a new coding agent can continue from repository documentation without depending on previous chat history.
+-   When asked to audit or transfer context, compare the documentation with the actual code before updating it.
+
+## 13. Development Principles
+
+1.  Simplicity over unnecessary complexity.
+2.  Security and privacy over convenience.
+3.  Readability over cleverness.
+4.  Reuse over duplication.
+5.  Consistent UX over isolated visual creativity.
+6.  Incremental delivery over large unreviewed changes.
+7.  Verified implementation over assumptions.
+8.  Accurate documentation over optimistic status reporting.
+
+Always preserve the existing architecture and follow the approved product roadmap unless explicitly instructed otherwise.
