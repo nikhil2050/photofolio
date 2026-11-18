@@ -19,6 +19,8 @@ npx supabase db push --remote
 
 ```
 
+The migrations explicitly grant the `authenticated` Data API role the required table operations. This is required because automatic table exposure is disabled in the project security settings; Row Level Security still controls which rows each user can access.
+
 5. In Supabase Dashboard, Authentication → URL Configuration, add:
 ```
 http://localhost:3000/auth/confirm

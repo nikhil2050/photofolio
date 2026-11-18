@@ -23,7 +23,7 @@
 
 ## Data and privacy
 
-`supabase/migrations/202611180001_phase_1_foundation.sql` creates RLS-protected profiles, galleries, photos, inquiries, and two private storage buckets. Galleries, images, inquiries, and client-facing delivery are data foundations only in this phase; no UI workflow is implemented.
+`supabase/migrations/202611180001_phase_1_foundation.sql` creates RLS-protected profiles, galleries, photos, inquiries, and two private storage buckets. `202611180002_grant_authenticated_table_access.sql` explicitly grants the signed-in Data API role only the required table operations because automatic table exposure is disabled. Galleries, images, inquiries, and client-facing delivery are data foundations only in this phase; no UI workflow is implemented.
 
 ## Required environment variables
 
