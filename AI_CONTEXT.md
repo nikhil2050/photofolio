@@ -10,7 +10,7 @@
 - Supabase provides Auth, Postgres, and private Storage.
 - `@supabase/ssr` owns browser/server cookie-aware clients in `src/lib/supabase`.
 - `proxy.ts` refreshes cookie sessions in Next.js 16.
-- Server Actions implement sign-up, sign-in, sign-out, and profile persistence. `getClaims()` verifies the authenticated identity on the server before protected data is read.
+- Server Actions implement sign-up, sign-in, sign-out, and profile persistence. `getClaims()` verifies the authenticated identity on the server before protected data is read. A server-validated profile-image route stores optional avatars in an owner-scoped private path.
 - Zod validates all auth/profile input server-side.
 - `src/components/ui` contains the reusable shadcn-style visual primitives; `/internal/style-guide` previews them only outside production.
 
@@ -20,7 +20,7 @@
 - `/sign-up`, `/sign-in`: email/password authentication
 - `/auth/callback`: primary Supabase email-confirmation callback; `/auth/confirm` remains as a compatible alias for existing templates
 - `/dashboard`: authenticated, factual empty state
-- `/profile`: authenticated photographer profile form with an optional owner-scoped logo/avatar upload
+- `/profile`: authenticated profile setup/editing with a live gallery-identity preview; a valid saved display name completes onboarding and leads to the dashboard
 
 ## Data and privacy
 

@@ -6,6 +6,7 @@ export type PhotographerProfile = {
   whatsapp_number: string | null;
   booking_cta_url: string | null;
   booking_cta_label: string;
+  setup_completed_at: string | null;
 };
 
 export async function getProfile(userId: string) {
@@ -13,7 +14,7 @@ export async function getProfile(userId: string) {
   const { data, error } = await supabase
     .from("photographer_profiles")
     .select(
-      "display_name, avatar_path, whatsapp_number, booking_cta_url, booking_cta_label",
+      "display_name, avatar_path, whatsapp_number, booking_cta_url, booking_cta_label, setup_completed_at",
     )
     .eq("user_id", userId)
     .maybeSingle();

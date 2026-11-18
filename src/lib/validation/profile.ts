@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const PROFILE_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+] as const;
+
+export const MAX_PROFILE_IMAGE_BYTES = 2 * 1024 * 1024;
+
 const optionalUrl = z
   .string()
   .trim()
@@ -24,7 +32,14 @@ export const profileSchema = z.object({
       "Use an international number, for example +491234567890.",
     )
     .optional(),
-  avatarPath: z.string().trim().max(500).optional(),
+  avatarPath: z
+    .string()
+    .trim()
+    .regex(
+      /^[0-9a-f-]{36}\/profile\/avatar-[0-9a-f-]{36}\.(?:jpe?g|png|webp)$/,
+      "The uploaded logo could not be verified.",
+    )
+    .optional(),
   bookingUrl: optionalUrl,
   bookingCtaLabel: z.string().trim().max(40).optional(),
 });

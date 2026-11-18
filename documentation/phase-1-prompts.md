@@ -397,7 +397,7 @@ Keep the authenticated route layout separate from the public auth layout. Use th
 
 ---
 
-# 5. Prompt — build photographer profile setup and save the profile
+# 5. Prompt — build photographer profile setup and save the profile ✅
 
 Read the shared brief and visual-system skill. Implement a first-time photographer profile setup flow that runs after successful account creation when the user has not completed their profile.
 

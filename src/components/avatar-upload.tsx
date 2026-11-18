@@ -1,20 +1,17 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ImagePlus, LoaderCircle } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { ImagePlus, LoaderCircle, Trash2 } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { HelperText, Label, ValidationMessage } from "@/components/ui/form";
 
-const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
-
 export function AvatarUpload({
-  userId,
   initialPath,
+  onChange,
 }: {
-  userId: string;
   initialPath: string | null;
+  onChange: (path: string, previewUrl: string | null) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [path, setPath] = useState(initialPath ?? "");
@@ -23,41 +20,55 @@ export function AvatarUpload({
 
   async function upload(file: File | undefined) {
     if (!file) return;
-    if (!file.type.startsWith("image/") || file.size > MAX_AVATAR_BYTES) {
-      setStatus("error");
-      setError("Choose an image smaller than 2 MB.");
-      return;
-    }
-
     setStatus("uploading");
     setError("");
-    const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const nextPath = `${userId}/profile/avatar-${crypto.randomUUID()}.${extension}`;
-    const supabase = createClient();
-    const { error: uploadError } = await supabase.storage
-      .from("preview-images")
-      .upload(nextPath, file, { upsert: false, contentType: file.type });
+    const formData = new FormData();
+    formData.set("image", file);
 
-    if (uploadError) {
+    try {
+      const response = await fetch("/api/profile/avatar", {
+        method: "POST",
+        body: formData,
+      });
+      const result = (await response.json()) as {
+        path?: string;
+        error?: string;
+      };
+      if (!response.ok || !result.path) {
+        throw new Error(
+          result.error ?? "Your logo could not be uploaded. Please try again.",
+        );
+      }
+      setPath(result.path);
+      onChange(result.path, URL.createObjectURL(file));
+      setStatus("idle");
+    } catch (uploadError) {
       setStatus("error");
-      setError("Your logo could not be uploaded. Please try again.");
-      return;
+      setError(
+        uploadError instanceof Error
+          ? uploadError.message
+          : "Your logo could not be uploaded. Please try again.",
+      );
     }
+  }
 
-    setPath(nextPath);
-    setStatus("idle");
+  function remove() {
+    setPath("");
+    setError("");
+    onChange("", null);
+    if (inputRef.current) inputRef.current.value = "";
   }
 
   return (
     <div>
       <input name="avatarPath" type="hidden" value={path} readOnly />
       <Label>
-        Studio logo or avatar{" "}
+        Logo or profile photo{" "}
         <span className="font-normal text-muted-foreground">(optional)</span>
       </Label>
       <div className="flex items-center gap-4">
         <Avatar initials={path ? "✓" : "PF"} />
-        <div>
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="secondary"
             type="button"
@@ -67,19 +78,28 @@ export function AvatarUpload({
             {status === "uploading" ? (
               <>
                 <LoaderCircle
-                  className="mr-2 animate-spin"
+                  className="animate-spin"
                   size={17}
                   aria-hidden="true"
-                />
+                />{" "}
                 Uploading…
               </>
             ) : (
               <>
-                <ImagePlus className="mr-2" size={17} aria-hidden="true" />
-                Choose image
+                <ImagePlus size={17} aria-hidden="true" /> Choose image
               </>
             )}
           </Button>
+          {path ? (
+            <Button
+              variant="ghost"
+              type="button"
+              onClick={remove}
+              disabled={status === "uploading"}
+            >
+              <Trash2 size={17} aria-hidden="true" /> Remove
+            </Button>
+          ) : null}
           <input
             ref={inputRef}
             className="sr-only"
@@ -87,9 +107,9 @@ export function AvatarUpload({
             accept="image/png,image/jpeg,image/webp"
             onChange={(event) => upload(event.target.files?.[0])}
           />
-          <HelperText>PNG, JPEG, or WebP; maximum 2 MB.</HelperText>
         </div>
       </div>
+      <HelperText>PNG, JPEG, or WebP; maximum 2 MB.</HelperText>
       {error ? (
         <ValidationMessage className="mt-3">{error}</ValidationMessage>
       ) : null}
