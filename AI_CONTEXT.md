@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 foundation.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, and a committed SQL migration. A Supabase project is not configured in this repository.
+**IN_PROGRESS — Phase 1 foundation.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, and committed SQL migrations. A local environment still needs its own Supabase credentials.
 
 ## Architecture
 
@@ -10,7 +10,7 @@
 - Supabase provides Auth, Postgres, and private Storage.
 - `@supabase/ssr` owns browser/server cookie-aware clients in `src/lib/supabase`.
 - `proxy.ts` refreshes cookie sessions in Next.js 16.
-- Server Actions implement sign-up, sign-in, sign-out, and profile persistence.
+- Server Actions implement sign-up, sign-in, sign-out, and profile persistence. `getClaims()` verifies the authenticated identity on the server before protected data is read.
 - Zod validates all auth/profile input server-side.
 - `src/components/ui` contains the reusable shadcn-style visual primitives; `/internal/style-guide` previews them only outside production.
 
@@ -18,7 +18,7 @@
 
 - `/`: public marketing foundation
 - `/sign-up`, `/sign-in`: email/password authentication
-- `/auth/confirm`: Supabase email-confirmation callback
+- `/auth/callback`: primary Supabase email-confirmation callback; `/auth/confirm` remains as a compatible alias for existing templates
 - `/dashboard`: authenticated, factual empty state
 - `/profile`: authenticated photographer profile form with an optional owner-scoped logo/avatar upload
 
@@ -34,5 +34,5 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 
 1. Apply migration `202611180003_expand_application_data_model.sql` to the linked Supabase project.
 2. Generate `src/types/database.ts` from the applied remote schema.
-3. Verify authentication redirect URLs in the Supabase dashboard.
+3. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).
 4. Begin Phase 2 gallery delivery only after pilot validation.

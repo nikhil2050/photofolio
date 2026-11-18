@@ -327,7 +327,7 @@ Generate TypeScript database types from the schema if the project's Supabase wor
 
 ---
 
-# 4. Prompt — implement secure authentication and protected routes
+# 4. Prompt — implement secure authentication and protected routes ✅
 
 Read the shared brief and check current official Next.js and Supabase authentication documentation for the installed package versions before coding.
 

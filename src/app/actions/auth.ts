@@ -3,15 +3,30 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { safeInternalRedirect } from "@/lib/auth/redirect";
 import { createClient } from "@/lib/supabase/server";
-import { credentialsSchema } from "@/lib/validation/auth";
+import { credentialsSchema, signUpSchema } from "@/lib/validation/auth";
 
-export type FormState = { error?: string; message?: string };
+type AuthField = "email" | "password" | "confirmPassword";
 
-function parseCredentials(formData: FormData) {
+export type FormState = {
+  formError?: string;
+  message?: string;
+  fieldErrors?: Partial<Record<AuthField, string>>;
+};
+
+function parseSignIn(formData: FormData) {
   return credentialsSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+  });
+}
+
+function parseSignUp(formData: FormData) {
+  return signUpSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
   });
 }
 
@@ -19,37 +34,57 @@ export async function signIn(
   _: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  const parsed = parseCredentials(formData);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+  const parsed = parseSignIn(formData);
+  if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    return {
+      fieldErrors: {
+        email: fieldErrors.email?.[0],
+        password: fieldErrors.password?.[0],
+      },
+    };
+  }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
-  if (error) return { error: "We could not sign you in with those details." };
+  if (error) {
+    return { formError: "We could not sign you in with those details." };
+  }
 
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  redirect(safeInternalRedirect(formData.get("next")));
 }
 
 export async function signUp(
   _: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  const parsed = parseCredentials(formData);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+  const parsed = parseSignUp(formData);
+  if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    return {
+      fieldErrors: {
+        email: fieldErrors.email?.[0],
+        password: fieldErrors.password?.[0],
+        confirmPassword: fieldErrors.confirmPassword?.[0],
+      },
+    };
+  }
 
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
   const { error } = await supabase.auth.signUp({
     ...parsed.data,
     options: {
-      emailRedirectTo: `${origin ?? "http://localhost:3000"}/auth/confirm`,
+      emailRedirectTo: `${origin ?? "http://localhost:3000"}/auth/callback`,
     },
   });
 
-  if (error)
+  if (error) {
     return {
-      error: "We could not create your account. Try a different email address.",
+      formError: "We could not create your account. Please try again.",
     };
+  }
   return { message: "Check your email to confirm your account, then sign in." };
 }
 

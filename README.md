@@ -9,7 +9,7 @@ Coding Agent - Codex
 1. Install dependencies: `npm install`
 2. Copy `.env.example` to `.env.local` and add the URL and publishable key from your Supabase project.
 3. Link the project and apply `supabase/migrations/202611180001_phase_1_foundation.sql` with the Supabase CLI (for example, `supabase db push`).
-4. In Supabase Auth, add `http://localhost:3000/auth/confirm` to the permitted redirect URLs for email confirmation.
+4. In Supabase Auth, add `http://localhost:3000/auth/callback` to the permitted redirect URLs for email confirmation. Keep `http://localhost:3000/auth/confirm` while migrating an existing confirmation-email template; the app supports both paths.
 5. Run `npm run dev`.
 
 The migration creates private `original-photos` and `preview-images` buckets. Do not make either bucket public.

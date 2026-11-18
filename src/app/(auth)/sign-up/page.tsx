@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { signUp } from "@/app/actions/auth";
 import { AuthForm } from "@/components/auth-form";
+import { redirectIfAuthenticated } from "@/lib/auth/require-user";
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  await redirectIfAuthenticated();
+
   return (
     <>
       <div className="mt-10">
@@ -18,7 +21,7 @@ export default function SignUpPage() {
         </p>
       </div>
       <div className="mt-8">
-        <AuthForm action={signUp} submitLabel="Create account" />
+        <AuthForm action={signUp} submitLabel="Create account" mode="sign-up" />
       </div>
       <p className="mt-6 text-sm text-muted-foreground">
         Already have an account?{" "}
