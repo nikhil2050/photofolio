@@ -8,11 +8,11 @@
 
 - Next.js App Router + TypeScript + Tailwind CSS.
 - Supabase provides Auth, Postgres, and private Storage.
-- `@supabase/ssr` owns browser/server cookie-aware clients in `src/lib/supabase`.
+- `@supabase/ssr` owns browser/server cookie-aware clients in `src/lib/supabase`; Zod validates required browser-safe configuration at startup/build and client creation.
 - `proxy.ts` refreshes cookie sessions in Next.js 16.
 - Server Actions implement sign-up, sign-in, sign-out, and profile persistence. `getClaims()` verifies the authenticated identity on the server before protected data is read. A server-validated profile-image route stores optional avatars in an owner-scoped private path.
 - Zod validates all auth/profile input server-side.
-- `src/components/ui` contains the reusable shadcn-style visual primitives; `/internal/style-guide` previews them only outside production.
+- `src/components/ui` contains the reusable shadcn-style visual primitives; `/internal/style-guide` previews them only outside production. `src/lib/errors` and `src/lib/logging` provide safe typed failures and structured server logs.
 
 ## Current routes
 

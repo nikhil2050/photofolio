@@ -565,7 +565,7 @@ Document any provider dashboard steps still required. Do not claim the buckets o
 
 ---
 
-# 8. Prompt — environment configuration, error handling, and logging
+# 8. Prompt — environment configuration, error handling, and logging ✅
 
 Read the shared brief and inspect the existing configuration before editing.
 

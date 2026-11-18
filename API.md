@@ -6,7 +6,7 @@ No public data API routes are implemented in Phase 1. Auth and profile mutations
 
 ## Profile asset route
 
-- `POST /api/profile/avatar`: authenticated multipart upload for an optional photographer avatar or logo. The request must provide an `image` file that is PNG, JPEG, or WebP and no larger than 2 MB. The server validates the declared MIME type, file size, and matching image signature before writing a server-generated, owner-scoped path to the private `preview-images` bucket. It returns `{ "path": "..." }` on success, or a safe `{ "error": "..." }` response with `400` for invalid input, `401` when unauthenticated, or `500` for a storage failure.
+- `POST /api/profile/avatar`: authenticated multipart upload for an optional photographer avatar or logo. The request must provide an `image` file that is PNG, JPEG, or WebP and no larger than 2 MB. The server validates the declared MIME type, file size, and matching image signature before writing a server-generated, owner-scoped path to the private `preview-images` bucket. It returns `{ "path": "..." }` on success, or a safe `{ "error": "...", "requestId": "..." }` response with an `x-request-id` header: `400` for invalid input, `401` when unauthenticated, or `500` for a storage failure.
 
 ## Authentication callback routes
 

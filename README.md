@@ -14,6 +14,8 @@ Coding Agent - Codex
 
 The migrations create private `original-photos` and `preview-images` buckets. Do not make either bucket public; see [storage-security.md](documentation/storage-security.md) for key conventions and verification.
 
+See [environment-and-errors.md](documentation/environment-and-errors.md) for environment expectations and the safe error/logging approach.
+
 A platform where photographers deliver photos to clients through branded galleries and showcase their portfolio, with a built-in loop that brings them new leads. It replaces the plain Google Drive link most photographers use today.
 
 > **Status:** Idea / pre-MVP. Reference competitor: [Wfolio](https://wfolio.com) (wfolio.pro redirects there).

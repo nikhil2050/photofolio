@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { AppError } from "@/lib/errors/app-error";
+import { logger } from "@/lib/logging/logger";
 
 export type PhotographerProfile = {
   id: string;
@@ -20,6 +22,15 @@ export async function getProfile(userId: string) {
     .eq("user_id", userId)
     .maybeSingle();
 
-  if (error) throw new Error("Unable to load your studio profile.");
+  if (error) {
+    logger.error("profile.read_failed", {
+      errorCode: "PROFILE_UNAVAILABLE",
+      operation: "profile_read",
+    });
+    throw new AppError(
+      "PROFILE_UNAVAILABLE",
+      "We could not load your studio profile.",
+    );
+  }
   return data as PhotographerProfile | null;
 }
