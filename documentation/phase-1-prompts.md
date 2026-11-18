@@ -594,7 +594,7 @@ Provide useful states for network failures, auth failures, validation errors, up
 
 ---
 
-# 9. Prompt — create privacy, terms, and copyright/takedown pages
+# 9. Prompt — create privacy, terms, and copyright/takedown pages ✅
 
 Read the shared brief and visual-system skill. Build three simple, readable public legal-information pages that use the same typography, spacing, navigation, and footer rules as the rest of the product:
 

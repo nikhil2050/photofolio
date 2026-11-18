@@ -21,6 +21,7 @@
 - `/auth/callback`: primary Supabase email-confirmation callback; `/auth/confirm` remains as a compatible alias for existing templates
 - `/dashboard`: authenticated studio overview with an owner-scoped gallery count, first-visit empty state, profile action, and a recoverable load-error state
 - `/profile`: authenticated profile setup/editing with a live gallery-identity preview; a valid saved display name completes onboarding and leads to the dashboard
+- `/privacy`, `/terms`, `/copyright`: readable Phase 1 legal-information drafts with clearly marked operator and legal-review placeholders
 
 ## Data and privacy
 
