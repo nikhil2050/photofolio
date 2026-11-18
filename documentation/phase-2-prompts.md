@@ -86,24 +86,24 @@ UX principles:
 
 The current project skill remains the design source of truth:
 
-`.agents/skills/photography-visual-system/SKILL.md`
+`.agents/skills/photofolio-visual-system/SKILL.md`
 
 Do not introduce a new palette or visual identity in Phase 2. Continue the existing warm editorial palette:
 
-| Token | Value | Use |
-|---|---|---|
-| `--background` | `#F7F5F0` | Warm app/gallery canvas |
-| `--surface` | `#FFFFFF` | Forms, menus, panels |
-| `--surface-muted` | `#EFEBE4` | Quiet secondary surfaces |
-| `--foreground` | `#242421` | Main text and primary button |
-| `--muted-foreground` | `#6F6A63` | Descriptions and metadata |
-| `--accent` | `#A66F52` | Restrained terracotta highlight |
-| `--accent-strong` | `#8D5B43` | Stronger accent text/action where contrast is needed |
-| `--border` | `#E5E0D8` | Borders and separators |
-| `--ring` | `#6F817E` | Focus ring |
-| `--success` | `#456B56` | Success state |
-| `--warning` | `#926B35` | Warning state |
-| `--destructive` | `#A44840` | Destructive/error state |
+| Token                | Value     | Use                                                  |
+| -------------------- | --------- | ---------------------------------------------------- |
+| `--background`       | `#F7F5F0` | Warm app/gallery canvas                              |
+| `--surface`          | `#FFFFFF` | Forms, menus, panels                                 |
+| `--surface-muted`    | `#EFEBE4` | Quiet secondary surfaces                             |
+| `--foreground`       | `#242421` | Main text and primary button                         |
+| `--muted-foreground` | `#6F6A63` | Descriptions and metadata                            |
+| `--accent`           | `#A66F52` | Restrained terracotta highlight                      |
+| `--accent-strong`    | `#8D5B43` | Stronger accent text/action where contrast is needed |
+| `--border`           | `#E5E0D8` | Borders and separators                               |
+| `--ring`             | `#6F817E` | Focus ring                                           |
+| `--success`          | `#456B56` | Success state                                        |
+| `--warning`          | `#926B35` | Warning state                                        |
+| `--destructive`      | `#A44840` | Destructive/error state                              |
 
 Typography:
 
@@ -124,26 +124,26 @@ Visual treatment:
 
 Build these as reusable components where they have repeated use. Reuse the existing UI foundation from Phase 1 instead of duplicating components.
 
-| Component | Visual direction | Purpose |
-|---|---|---|
-| `GalleryCard` | Large photographic cover, quiet metadata, small text status | Gallery library |
-| `GalleryStatus` | Small text + restrained icon; no oversized coloured badge | Draft/published/archived state |
-| `GalleryForm` | Clean vertical form with short helper text | Create/edit gallery |
-| `UploadDropzone` | Thin dashed border, upload icon, concise supported-format note | Photo upload |
-| `UploadQueue` | Filename, progress bar, status and retry/remove action | Batch upload feedback |
-| `PhotoGrid` | Image-led grid with calm gutters and subtle hover actions | Photographer management |
-| `PhotoSelectionToolbar` | Compact contextual bar, appears only when selected | Bulk photo actions |
-| `PhotoCoverMarker` | Small unobtrusive label/icon | Indicate cover photo |
-| `GallerySharePanel` | Readable share URL, copy action, access state, password controls | Publishing/sharing |
-| `PasswordGate` | Centered minimal form, gallery/photographer identity, no unnecessary detail | Protected client gallery |
-| `ClientGalleryHeader` | Photographer identity, gallery title and quiet contact CTA | Client experience |
-| `ClientPhotoGrid` | Spacious, responsive, image-first layout | Photo viewing |
-| `PhotoLightbox` | Large image, quiet controls, close/next/previous, favourite | Focused viewing |
-| `FavouriteButton` | Heart outline; filled state only when selected | Client favourites |
-| `FavouriteSummary` | Real count and photo list/filter | Photographer proofing view |
-| `InquiryForm` | Minimal name/email/message form with clear consent | Lead capture |
-| `GalleryEmptyState` | Simple line icon and useful next step, no generic illustration | Empty states |
-| `GallerySkeleton` | Neutral image-shaped placeholders | Loading states |
+| Component               | Visual direction                                                            | Purpose                        |
+| ----------------------- | --------------------------------------------------------------------------- | ------------------------------ |
+| `GalleryCard`           | Large photographic cover, quiet metadata, small text status                 | Gallery library                |
+| `GalleryStatus`         | Small text + restrained icon; no oversized coloured badge                   | Draft/published/archived state |
+| `GalleryForm`           | Clean vertical form with short helper text                                  | Create/edit gallery            |
+| `UploadDropzone`        | Thin dashed border, upload icon, concise supported-format note              | Photo upload                   |
+| `UploadQueue`           | Filename, progress bar, status and retry/remove action                      | Batch upload feedback          |
+| `PhotoGrid`             | Image-led grid with calm gutters and subtle hover actions                   | Photographer management        |
+| `PhotoSelectionToolbar` | Compact contextual bar, appears only when selected                          | Bulk photo actions             |
+| `PhotoCoverMarker`      | Small unobtrusive label/icon                                                | Indicate cover photo           |
+| `GallerySharePanel`     | Readable share URL, copy action, access state, password controls            | Publishing/sharing             |
+| `PasswordGate`          | Centered minimal form, gallery/photographer identity, no unnecessary detail | Protected client gallery       |
+| `ClientGalleryHeader`   | Photographer identity, gallery title and quiet contact CTA                  | Client experience              |
+| `ClientPhotoGrid`       | Spacious, responsive, image-first layout                                    | Photo viewing                  |
+| `PhotoLightbox`         | Large image, quiet controls, close/next/previous, favourite                 | Focused viewing                |
+| `FavouriteButton`       | Heart outline; filled state only when selected                              | Client favourites              |
+| `FavouriteSummary`      | Real count and photo list/filter                                            | Photographer proofing view     |
+| `InquiryForm`           | Minimal name/email/message form with clear consent                          | Lead capture                   |
+| `GalleryEmptyState`     | Simple line icon and useful next step, no generic illustration              | Empty states                   |
+| `GallerySkeleton`       | Neutral image-shaped placeholders                                           | Loading states                 |
 
 ### Icon guidance
 
@@ -195,7 +195,7 @@ Design all states intentionally:
 
 The following rules apply to all prompts below:
 
-1. Read `AGENTS.md`, `AI_CONTEXT.md` if it exists, the relevant Phase 1 implementation notes, and `.agents/skills/photography-visual-system/SKILL.md` before coding.
+1. Read `AGENTS.md`, `AI_CONTEXT.md` if it exists, the relevant Phase 1 implementation notes, and `.agents/skills/photofolio-visual-system/SKILL.md` before coding.
 2. Inspect the actual codebase and installed package versions before editing. Do not assume that a route, table, component or policy exists merely because it is mentioned in documentation.
 3. Keep frontend and backend in the same Next.js repository using the existing modular-monolith structure. Do not create a separate backend repository or duplicate API server.
 4. Keep UI, feature/business logic and data access separated. Follow existing naming and folder conventions.
@@ -222,7 +222,7 @@ The following rules apply to all prompts below:
 ```text
 We are starting Phase 2: Gallery Management & Client Delivery for the Photographer Portfolio & Client Gallery Platform.
 
-Read AGENTS.md, AI_CONTEXT.md if present, phase-1-prompts.md, and .agents/skills/photography-visual-system/SKILL.md. Then inspect the current repository and actual Supabase migrations/configuration.
+Read AGENTS.md, AI_CONTEXT.md if present, phase-1-prompts.md, and .agents/skills/photofolio-visual-system/SKILL.md. Then inspect the current repository and actual Supabase migrations/configuration.
 
 Our required architecture is one Next.js + TypeScript repository using a modular monolith. Frontend routes, server actions/route handlers, feature services, validation, and data-access code stay in this repository. Supabase is the existing provider for PostgreSQL, authentication and private object storage.
 
@@ -363,7 +363,7 @@ Acceptance criteria:
 ```text
 Build the photographer-facing Gallery Library and Create Gallery flow.
 
-First inspect the existing dashboard shell, navigation, profile, data-access services and shared components. Reuse the Phase 1 layout and the photography-visual-system skill. Do not create a second dashboard design.
+First inspect the existing dashboard shell, navigation, profile, data-access services and shared components. Reuse the Phase 1 layout and the Photofolio visual-system skill. Do not create a second dashboard design.
 
 A. Gallery Library route
 Create the authenticated gallery-management route using the repository's route conventions.
@@ -694,7 +694,7 @@ Build the public/client-facing gallery experience for valid published share link
 
 This is the product's most important visual surface. It should feel like receiving photographs from a thoughtful professional photographer, not browsing a generic cloud-drive folder.
 
-Before coding, study the existing profile model and photography-visual-system skill. The client gallery must use the same underlying design tokens as the photographer dashboard, but its layout should give much more space to the photographs.
+Before coding, study the existing profile model and Photofolio visual-system skill. The client gallery must use the same underlying design tokens as the photographer dashboard, but its layout should give much more space to the photographs.
 
 A. Public route and access
 - Implement the share-token route following the existing Next.js route conventions.
@@ -888,7 +888,7 @@ F. Acceptance criteria
 ```text
 Perform a dedicated visual and UX pass across all Phase 2 screens. Do not add new features during this task unless a missing state prevents a screen from being usable.
 
-Read `.agents/skills/photography-visual-system/SKILL.md` and compare the implementation against it.
+Read `.agents/skills/photofolio-visual-system/SKILL.md` and compare the implementation against it.
 
 Review these surfaces:
 1. Photographer Gallery Library.

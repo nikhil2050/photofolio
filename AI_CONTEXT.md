@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 acceptance review.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete.
+**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompt 0 audit complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. Phase 2 gallery-delivery feature work has not started; see `documentation/phase-2-audit.md` for the verified implementation plan.
 
 ## Architecture
 
@@ -35,6 +35,6 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 ## Next planned work
 
 1. Run the documented hosted authentication, two-account RLS, storage, and responsive browser checks before declaring Phase 1 complete.
-2. Generate `src/types/database.ts` from the applied remote schema.
-3. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).
-4. Begin Phase 2 gallery delivery only after pilot validation.
+2. Execute Phase 2 Prompt 1: additive gallery-delivery schema and access-control work, following `documentation/phase-2-audit.md`.
+3. Generate `src/types/database.ts` after the next applied schema migration.
+4. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).
