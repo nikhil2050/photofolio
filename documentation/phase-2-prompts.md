@@ -215,7 +215,7 @@ The following rules apply to all prompts below:
 
 # C. Implementation prompts
 
-# Prompt 0 — Phase 2 repository audit and implementation plan
+# Prompt 0 — Phase 2 repository audit and implementation plan ✅
 
 **Paste this prompt first. Do not start feature implementation until the audit is complete.**
 
@@ -253,7 +253,7 @@ Do not implement features in this prompt. Do not replace existing architecture, 
 
 ---
 
-# Prompt 1 — Database model, migrations and access-control foundation
+# Prompt 1 — Database model, migrations and access-control foundation ✅
 
 ```text
 Implement the Phase 2 database and access-control foundation for gallery delivery.
@@ -358,7 +358,7 @@ Acceptance criteria:
 
 ---
 
-# Prompt 2 — Photographer gallery library and gallery creation flow
+# Prompt 2 — Photographer gallery library and gallery creation flow ✅
 
 ```text
 Build the photographer-facing Gallery Library and Create Gallery flow.

@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompt 1 local foundation complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. Phase 2's additive delivery schema, private-storage policy update, and server-only secret helpers are present locally but await explicit confirmation before deployment to the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
+**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompts 1–2 are locally complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. The Phase 2 gallery library and draft-creation routes are implemented locally but require migration `202611180005` before they can create or fully read galleries against the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
 
 ## Architecture
 
@@ -13,6 +13,7 @@
 - Server Actions implement sign-up, sign-in, sign-out, and profile persistence. `getClaims()` verifies the authenticated identity on the server before protected data is read. A server-validated profile-image route stores optional avatars in an owner-scoped private path.
 - Zod validates all auth/profile input server-side.
 - `src/components/ui` contains the reusable shadcn-style visual primitives; `/internal/style-guide` previews them only outside production. `src/lib/errors` and `src/lib/logging` provide safe typed failures and structured server logs.
+- `src/lib/galleries` owns gallery reads and draft creation; `src/lib/validation/gallery.ts` owns create-form and URL-filter validation. `src/app/actions/galleries.ts` resolves ownership from the signed-in profile before it creates a draft.
 - Vitest covers pure validation, safe redirects, and environment boundaries. Hosted Supabase and browser acceptance procedures live in `documentation/phase-1-acceptance.md`.
 
 ## Current routes
@@ -22,6 +23,9 @@
 - `/auth/callback`: primary Supabase email-confirmation callback; `/auth/confirm` remains as a compatible alias for existing templates
 - `/dashboard`: authenticated studio overview with an owner-scoped gallery count, first-visit empty state, profile action, and a recoverable load-error state
 - `/profile`: authenticated profile setup/editing with a live gallery-identity preview; a valid saved display name completes onboarding and leads to the dashboard
+- `/galleries`: authenticated gallery library with server-side search, status filters, pagination, real ready-photo counts, and empty/loading/error states
+- `/galleries/new`: authenticated short draft-gallery form
+- `/galleries/[galleryId]`: authenticated, owner-scoped confirmation/details screen for a created private draft
 - `/privacy`, `/terms`, `/copyright`: readable Phase 1 legal-information drafts with clearly marked operator and legal-review placeholders
 
 ## Data and privacy
@@ -36,5 +40,6 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 
 1. Run the documented hosted authentication, two-account RLS, storage, and responsive browser checks before declaring Phase 1 complete.
 2. Explicitly approve and apply `202611180005_phase_2_gallery_delivery_foundation.sql` to the linked production project, then generate `src/types/database.ts` from the applied schema.
-3. Run the documented two-account Phase 2 RLS and storage checks in a non-production Supabase project or branch.
-4. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).
+3. Execute Phase 2 Prompt 3: secure multi-photo upload and processing, after the migration is deployed.
+4. Run the documented two-account Phase 2 RLS and storage checks in a non-production Supabase project or branch.
+5. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).

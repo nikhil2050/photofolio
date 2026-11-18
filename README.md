@@ -2,7 +2,7 @@ Coding Agent - Codex
 
 # Photofolio
 
-> **Implementation status:** Phase 1 foundation is in progress. Authentication, protected studio routes, guided photographer profile onboarding, and private-storage database foundations are implemented in the repository. Configure Supabase before using authenticated features.
+> **Implementation status:** Phase 1 acceptance is in progress. Authentication, protected studio routes, photographer profile onboarding, private-storage foundations, and a local Phase 2 gallery-library/draft-creation flow are implemented. Apply all committed Supabase migrations before using gallery features.
 
 ## Local setup
 

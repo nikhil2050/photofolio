@@ -1,7 +1,8 @@
 # Phase 2 repository audit and implementation plan
 
-**Status:** COMPLETED — audit only; no Phase 2 product feature has been
-implemented.
+**Status:** COMPLETED — audit completed. Prompt 1's schema/access foundation
+and Prompt 2's gallery-library source are implemented locally; migration
+`202611180005` is still pending remote deployment.
 
 **Audited:** 18 November 2026
 
@@ -9,10 +10,11 @@ implemented.
 
 Photofolio is a single Next.js modular monolith. It uses Next.js 16.4.6,
 React 19.3.0, TypeScript strict mode, Tailwind CSS 4.3.3, Zod 4.6.7,
-`@supabase/ssr` 0.12.7, Supabase JS 2.119.0, and Vitest 5.1.1. No gallery UI,
-photo upload flow, share-link flow, client gallery, favourites UI, inquiry UI,
-image processor, job queue, Playwright suite, or generated database types exist
-yet.
+`@supabase/ssr` 0.12.7, Supabase JS 2.119.0, and Vitest 5.1.1. An authenticated
+gallery library, draft-creation form, server-side filters, pagination, and
+owner-scoped draft confirmation screen are implemented locally. Photo upload,
+share links, client galleries, favourites UI, inquiry UI, image processing,
+job queues, Playwright, and generated database types do not exist yet.
 
 Phase 1 provides working foundations in source code:
 
@@ -132,7 +134,7 @@ tables or reset data.
 | Prompt | Deliverable                                 | Likely files/modules                                                                                                                                   |
 | ------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 1      | Schema, RLS, private-access foundation      | New migration(s); `src/lib/galleries`, `src/lib/photos`, `src/lib/validation/*`; generated `src/types/database.ts`; RLS SQL checks.                    |
-| 2      | Gallery library and draft creation          | `src/app/(studio)/galleries/*`, `src/app/actions/galleries.ts`, gallery repository/schema/components, `DashboardShell`.                                |
+| 2      | Gallery library and draft creation          | **Locally completed.** `src/app/(studio)/galleries/*`, `src/app/actions/galleries.ts`, gallery repository/schema/components, `DashboardShell`.         |
 | 3      | Multi-photo upload and processing           | Upload route handlers under `src/app/api/galleries/*`, photo service/validation, storage-key utility, processing abstraction, upload components/tests. |
 | 4      | Editor, photo organisation, cover selection | Gallery editor routes/actions, photo repository/service, reusable photo grid/row components and ownership tests.                                       |
 | 5      | Publish, private links, password gate       | Share-token/password/access services, server-only route handlers, sharing settings UI, access/rate-limit tests.                                        |

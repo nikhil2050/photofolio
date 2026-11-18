@@ -31,7 +31,7 @@ export default async function DashboardPage() {
       <PageHeader
         eyebrow="Studio overview"
         title="Your studio starts here"
-        description={`Your profile is ready, ${displayName}. When you create your first gallery, it will appear here.`}
+        description={`Your profile is ready, ${displayName}. Create a gallery when you are ready to organise a client delivery.`}
       />
       {galleryCount === 0 ? (
         <FirstVisitState />
@@ -48,39 +48,14 @@ function FirstVisitState() {
       <EmptyState
         className="mt-10"
         icon={Images}
-        title="No galleries yet"
-        description="Your first gallery will appear here when gallery delivery is available."
+        title="Your first gallery starts here"
+        description="Create a private draft, then add the photographs you want to share."
         action={
           <Button asChild>
-            <Link href="/profile">Edit photographer profile</Link>
+            <Link href="/galleries/new">Create gallery</Link>
           </Button>
         }
       />
-      <Card className="mt-8">
-        <CardContent>
-          <h2 className="text-lg font-semibold">What comes next</h2>
-          <ol className="mt-5 grid gap-4 text-sm leading-6 text-muted-foreground sm:grid-cols-3">
-            <li>
-              <span className="mb-2 flex size-7 items-center justify-center rounded-full bg-surface-muted text-xs font-semibold text-foreground">
-                1
-              </span>
-              Create a gallery
-            </li>
-            <li>
-              <span className="mb-2 flex size-7 items-center justify-center rounded-full bg-surface-muted text-xs font-semibold text-foreground">
-                2
-              </span>
-              Share it with your client
-            </li>
-            <li>
-              <span className="mb-2 flex size-7 items-center justify-center rounded-full bg-surface-muted text-xs font-semibold text-foreground">
-                3
-              </span>
-              Receive favourites and enquiries
-            </li>
-          </ol>
-        </CardContent>
-      </Card>
     </>
   );
 }
@@ -94,11 +69,10 @@ function GallerySummary({ count }: { count: number }) {
           studio.
         </p>
         <p className="mt-2 max-w-xl leading-7 text-muted-foreground">
-          Gallery management is not available in this foundation phase. You can
-          still keep your studio details up to date.
+          Keep your client galleries organised in one calm, private workspace.
         </p>
         <Button className="mt-6" variant="secondary" asChild>
-          <Link href="/profile">Edit photographer profile</Link>
+          <Link href="/galleries">View galleries</Link>
         </Button>
       </CardContent>
     </Card>

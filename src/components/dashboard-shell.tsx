@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Camera, LayoutDashboard, Settings } from "lucide-react";
 import { signOut } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils/cn";
 
 export function DashboardShell({
   children,
@@ -44,13 +43,10 @@ export function DashboardShell({
               <Settings size={18} aria-hidden="true" />
               Profile
             </Link>
-            <span
-              className={cn(navLinkClass, "cursor-not-allowed opacity-50")}
-              aria-disabled="true"
-            >
+            <Link className={navLinkClass} href="/galleries">
               <Camera size={18} aria-hidden="true" />
-              Galleries <span className="ml-auto text-xs">Soon</span>
-            </span>
+              Galleries
+            </Link>
           </nav>
         </aside>
         <main className="min-w-0 flex-1 px-6 py-10 lg:px-10 lg:py-12">

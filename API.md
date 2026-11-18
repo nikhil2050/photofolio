@@ -26,5 +26,11 @@ These routes accept only the Supabase-generated confirmation parameters and do n
 - `signIn`: validates email/password with Zod and creates a cookie-backed Supabase session. An internal return path is constrained to a local application route.
 - `signOut`: revokes the current Supabase session.
 - `saveProfile`: validates and upserts the signed-in photographer's profile under RLS. It uses only the authenticated identity for ownership, accepts only server-generated avatar paths, marks setup complete through the database trigger once a valid display name persists, cleans up a replaced avatar when possible, and redirects to `/dashboard` after saving.
+- `createGallery`: validates the short draft-gallery form, resolves the
+  photographer profile from the authenticated identity rather than a submitted
+  owner ID, creates an RLS-scoped private draft, revalidates the library, and
+  redirects to the new gallery's owner-scoped confirmation route. It requires
+  the pending `202611180005` migration because it persists the optional
+  location field.
 
 All actions use the authenticated server client. No service-role credentials are used. `proxy.ts` refreshes sessions and provides early redirects, while protected server routes independently verify JWT claims before returning data.
