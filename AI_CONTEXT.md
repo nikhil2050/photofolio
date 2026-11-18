@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompt 0 audit complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. Phase 2 gallery-delivery feature work has not started; see `documentation/phase-2-audit.md` for the verified implementation plan.
+**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompt 1 local foundation complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. Phase 2's additive delivery schema, private-storage policy update, and server-only secret helpers are present locally but await explicit confirmation before deployment to the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
 
 ## Architecture
 
@@ -26,7 +26,7 @@
 
 ## Data and privacy
 
-`supabase/migrations/202611180001_phase_1_foundation.sql` creates the original RLS-protected foundation and private storage buckets. `202611180002_grant_authenticated_table_access.sql` explicitly grants the signed-in Data API role required operations because automatic table exposure is disabled. `202611180003_expand_application_data_model.sql` establishes the six-entity model: users, photographer profiles, galleries, photos, favourites, and inquiries. `202611180004_secure_private_photo_storage.sql` is applied and hardens private object-key policies for owner-and-gallery access. See `documentation/database-model.md` and `documentation/storage-security.md` for verification guidance.
+`supabase/migrations/202611180001_phase_1_foundation.sql` creates the original RLS-protected foundation and private storage buckets. `202611180002_grant_authenticated_table_access.sql` explicitly grants the signed-in Data API role required operations because automatic table exposure is disabled. `202611180003_expand_application_data_model.sql` establishes the six-entity model: users, photographer profiles, galleries, photos, favourites, and inquiries. `202611180004_secure_private_photo_storage.sql` is applied and hardens private object-key policies for owner-and-gallery access. `202611180005_phase_2_gallery_delivery_foundation.sql` is locally validated and pending remote application; it adds access-secret hashes, photo processing fields, gallery-scoped favourites, integrity constraints, thumbnail policy support, and original-bucket limits without opening client access. See `documentation/database-model.md` and `documentation/storage-security.md` for verification guidance.
 
 ## Required environment variables
 
@@ -35,6 +35,6 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 ## Next planned work
 
 1. Run the documented hosted authentication, two-account RLS, storage, and responsive browser checks before declaring Phase 1 complete.
-2. Execute Phase 2 Prompt 1: additive gallery-delivery schema and access-control work, following `documentation/phase-2-audit.md`.
-3. Generate `src/types/database.ts` after the next applied schema migration.
+2. Explicitly approve and apply `202611180005_phase_2_gallery_delivery_foundation.sql` to the linked production project, then generate `src/types/database.ts` from the applied schema.
+3. Run the documented two-account Phase 2 RLS and storage checks in a non-production Supabase project or branch.
 4. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).

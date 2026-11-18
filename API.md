@@ -2,7 +2,12 @@
 
 ## Status
 
-No public data API routes are implemented in Phase 1. Auth and profile mutations are handled by authenticated Next.js Server Actions and are not a public data API contract.
+No public gallery-delivery API routes are implemented. Auth and profile
+mutations are handled by authenticated Next.js Server Actions and are not a
+public data API contract. Phase 2's database/access-control foundation is
+implemented locally in migration `202611180005` but awaits explicit deployment
+to the linked production project; it does not introduce an endpoint or public
+client access.
 
 ## Profile asset route
 

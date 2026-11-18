@@ -1,13 +1,17 @@
 # Private storage design and verification
 
-## Status: IN_PROGRESS — configuration verified; multi-account checks remain
+## Status: IN_PROGRESS — Phase 1 configuration verified; Phase 2 restriction update pending deployment
 
 Migration `202611180004_secure_private_photo_storage.sql` was applied to the
 linked Supabase project on 18 November 2026. A read-only remote query verified
 that both buckets are private, `preview-images` has the 5 MB/image-only
 controls, and only the two policies defined by this migration apply to these
-owner-managed objects. The two-account RLS checks below still need deliberate
-test fixtures; signed-URL expiry remains a future delivery-control check.
+owner-managed objects. Migration `202611180005_phase_2_gallery_delivery_foundation.sql`
+is locally validated and pending explicit deployment confirmation. It keeps
+both buckets private, restricts `original-photos` to JPEG/PNG/WebP files up to
+25 MB, and permits a controlled `thumbnail.webp` sibling beside each gallery
+preview. The two-account RLS checks below still need deliberate test fixtures;
+signed-URL expiry remains a future delivery-control check.
 
 ## Bucket design
 
@@ -15,14 +19,15 @@ Photofolio retains its existing bucket IDs rather than renaming them to the
 suggested examples. Renaming would require moving profile assets that already
 use `preview-images`.
 
-| Bucket            | Visibility | Purpose                                                | Guardrails                                                                         |
-| ----------------- | ---------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| `original-photos` | Private    | Future full-resolution source files                    | Gallery-and-owner scoped RLS; no public URL path or client policy.                 |
-| `preview-images`  | Private    | Future controlled previews and existing profile images | Gallery-and-owner/profile scoped RLS; 5 MB bucket limit; JPEG, PNG, and WebP only. |
+| Bucket            | Visibility | Purpose                                                | Guardrails                                                                                                |
+| ----------------- | ---------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `original-photos` | Private    | Future full-resolution source files                    | Gallery-and-owner scoped RLS; 25 MB limit; JPEG, PNG, and WebP only; no public URL path or client policy. |
+| `preview-images`  | Private    | Future controlled previews and existing profile images | Gallery-and-owner/profile scoped RLS; 5 MB bucket limit; JPEG, PNG, and WebP only.                        |
 
 `preview-images` remains shared temporarily because profile images already use
 `{user_id}/profile/avatar-{asset_id}.{extension}`. Gallery delivery will use
-`{user_id}/{gallery_id}/{photo_id}/preview.webp`. A dedicated `profile-assets`
+`{user_id}/{gallery_id}/{photo_id}/preview.webp` and
+`{user_id}/{gallery_id}/{photo_id}/thumbnail.webp`. A dedicated `profile-assets`
 bucket can be introduced later only with a deliberate migration of existing
 objects and database paths.
 
@@ -33,6 +38,7 @@ Only trusted future server-side gallery code may create photo keys:
 ```text
 {user_id}/{gallery_id}/{photo_id}/original.{extension}
 {user_id}/{gallery_id}/{photo_id}/preview.webp
+{user_id}/{gallery_id}/{photo_id}/thumbnail.webp
 {user_id}/profile/avatar-{asset_id}.{jpg|jpeg|png|webp}
 ```
 
