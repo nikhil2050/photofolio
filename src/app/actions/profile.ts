@@ -33,9 +33,9 @@ export async function saveProfile(
     {
       user_id: user.id,
       display_name: parsed.data.displayName,
-      contact_phone: parsed.data.contactPhone ?? null,
+      whatsapp_number: parsed.data.contactPhone ?? null,
       avatar_path: parsed.data.avatarPath ?? null,
-      booking_url: parsed.data.bookingUrl ?? null,
+      booking_cta_url: parsed.data.bookingUrl ?? null,
       booking_cta_label: parsed.data.bookingCtaLabel || "Book a shoot",
     },
     { onConflict: "user_id" },

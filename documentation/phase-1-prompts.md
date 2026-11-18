@@ -204,7 +204,7 @@ Create a warm editorial minimal interface. Use a quiet off-white canvas, white s
 
 ---
 
-# 3. Prompt — design and implement the initial database model
+# 3. Prompt — design and implement the initial database model ✅
 
 Read the shared brief. Inspect the existing Supabase project configuration and migrations. Do not assume tables or policies already exist.
 

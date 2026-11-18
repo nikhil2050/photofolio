@@ -38,7 +38,7 @@ export function ProfileForm({
         <Input
           id="displayName"
           name="displayName"
-          defaultValue={profile?.display_name}
+          defaultValue={profile?.display_name ?? ""}
           autoComplete="organization"
           required
         />
@@ -46,16 +46,18 @@ export function ProfileForm({
       </div>
       <div>
         <Label htmlFor="contactPhone">
-          Contact or WhatsApp number{" "}
+          WhatsApp number{" "}
           <span className="font-normal text-muted-foreground">(optional)</span>
         </Label>
         <Input
           id="contactPhone"
           name="contactPhone"
-          defaultValue={profile?.contact_phone ?? ""}
+          defaultValue={profile?.whatsapp_number ?? ""}
           autoComplete="tel"
           inputMode="tel"
+          placeholder="+491234567890"
         />
+        <HelperText>Use international format, beginning with +.</HelperText>
       </div>
       <div>
         <Label htmlFor="bookingUrl">
@@ -66,7 +68,7 @@ export function ProfileForm({
           id="bookingUrl"
           name="bookingUrl"
           type="url"
-          defaultValue={profile?.booking_url ?? ""}
+          defaultValue={profile?.booking_cta_url ?? ""}
           placeholder="https://"
           inputMode="url"
         />
