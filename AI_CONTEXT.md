@@ -24,7 +24,7 @@
 
 ## Data and privacy
 
-`supabase/migrations/202611180001_phase_1_foundation.sql` creates the original RLS-protected foundation and private storage buckets. `202611180002_grant_authenticated_table_access.sql` explicitly grants the signed-in Data API role required operations because automatic table exposure is disabled. `202611180003_expand_application_data_model.sql` establishes the six-entity model: users, photographer profiles, galleries, photos, favourites, and inquiries. See `documentation/database-model.md` for ownership, RLS, and type-generation guidance.
+`supabase/migrations/202611180001_phase_1_foundation.sql` creates the original RLS-protected foundation and private storage buckets. `202611180002_grant_authenticated_table_access.sql` explicitly grants the signed-in Data API role required operations because automatic table exposure is disabled. `202611180003_expand_application_data_model.sql` establishes the six-entity model: users, photographer profiles, galleries, photos, favourites, and inquiries. `202611180004_secure_private_photo_storage.sql` is applied and hardens private object-key policies for owner-and-gallery access. See `documentation/database-model.md` and `documentation/storage-security.md` for verification guidance.
 
 ## Required environment variables
 
@@ -32,7 +32,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 
 ## Next planned work
 
-1. Apply migration `202611180003_expand_application_data_model.sql` to the linked Supabase project.
+1. Run the documented two-account storage RLS checks before enabling gallery delivery.
 2. Generate `src/types/database.ts` from the applied remote schema.
 3. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).
 4. Begin Phase 2 gallery delivery only after pilot validation.

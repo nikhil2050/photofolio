@@ -8,11 +8,11 @@ Coding Agent - Codex
 
 1. Install dependencies: `npm install`
 2. Copy `.env.example` to `.env.local` and add the URL and publishable key from your Supabase project.
-3. Link the project and apply `supabase/migrations/202611180001_phase_1_foundation.sql` with the Supabase CLI (for example, `supabase db push`).
+3. Link the project and apply all committed migrations with the Supabase CLI (for example, `npx supabase db push`).
 4. In Supabase Auth, add `http://localhost:3000/auth/callback` to the permitted redirect URLs for email confirmation. Keep `http://localhost:3000/auth/confirm` while migrating an existing confirmation-email template; the app supports both paths.
 5. Run `npm run dev`.
 
-The migration creates private `original-photos` and `preview-images` buckets. Do not make either bucket public.
+The migrations create private `original-photos` and `preview-images` buckets. Do not make either bucket public; see [storage-security.md](documentation/storage-security.md) for key conventions and verification.
 
 A platform where photographers deliver photos to clients through branded galleries and showcase their portfolio, with a built-in loop that brings them new leads. It replaces the plain Google Drive link most photographers use today.
 

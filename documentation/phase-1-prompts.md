@@ -509,7 +509,7 @@ Do not show fake gallery cards, sample client names, fake statistics, fake activ
 
 ---
 
-# 7. Prompt — configure private originals and controlled preview storage
+# 7. Prompt — configure private originals and controlled preview storage ✅
 
 Read the shared brief. Inspect the current storage provider documentation and the project's bucket/policy state before changing anything.
 
