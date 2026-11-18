@@ -2,6 +2,14 @@
 
 import { useActionState } from "react";
 import type { FormState } from "@/app/actions/auth";
+import { Button } from "@/components/ui/button";
+import {
+  HelperText,
+  Label,
+  SuccessMessage,
+  ValidationMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 type AuthAction = (state: FormState, formData: FormData) => Promise<FormState>;
 
@@ -19,11 +27,8 @@ export function AuthForm({
   return (
     <form action={formAction} className="space-y-5" noValidate>
       <div>
-        <label className="field-label" htmlFor="email">
-          Email address
-        </label>
-        <input
-          className="field"
+        <Label htmlFor="email">Email address</Label>
+        <Input
           id="email"
           name="email"
           type="email"
@@ -32,11 +37,8 @@ export function AuthForm({
         />
       </div>
       <div>
-        <label className="field-label" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="field"
+        <Label htmlFor="password">Password</Label>
+        <Input
           id="password"
           name="password"
           type="password"
@@ -44,27 +46,15 @@ export function AuthForm({
           minLength={8}
           required
         />
-        <p className="mt-2 text-sm text-muted-foreground">
-          Use at least 8 characters.
-        </p>
+        <HelperText>Use at least 8 characters.</HelperText>
       </div>
       {state.error ? (
-        <p className="form-error" role="alert">
-          {state.error}
-        </p>
+        <ValidationMessage>{state.error}</ValidationMessage>
       ) : null}
-      {state.message ? (
-        <p className="form-success" role="status">
-          {state.message}
-        </p>
-      ) : null}
-      <button
-        className="button button-primary w-full"
-        type="submit"
-        disabled={isPending}
-      >
+      {state.message ? <SuccessMessage>{state.message}</SuccessMessage> : null}
+      <Button className="w-full" type="submit" disabled={isPending}>
         {isPending ? "Please wait…" : submitLabel}
-      </button>
+      </Button>
     </form>
   );
 }

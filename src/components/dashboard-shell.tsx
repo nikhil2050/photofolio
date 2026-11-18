@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Camera, LayoutDashboard, Settings } from "lucide-react";
 import { signOut } from "@/app/actions/auth";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils/cn";
 
 export function DashboardShell({
   children,
@@ -12,7 +14,7 @@ export function DashboardShell({
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-[var(--content-dashboard)] items-center justify-between px-6 lg:px-8">
           <Link className="brand" href="/dashboard">
             Photofolio
           </Link>
@@ -21,29 +23,29 @@ export function DashboardShell({
               {displayName ?? "Your studio"}
             </span>
             <form action={signOut}>
-              <button className="button button-ghost" type="submit">
+              <Button variant="ghost" size="small" type="submit">
                 Sign out
-              </button>
+              </Button>
             </form>
           </div>
         </div>
       </header>
-      <div className="mx-auto flex max-w-7xl flex-col lg:flex-row">
-        <aside className="border-b border-border px-6 py-4 lg:min-h-[calc(100vh-65px)] lg:w-60 lg:border-r lg:border-b-0 lg:px-5 lg:py-8">
+      <div className="mx-auto flex max-w-[var(--content-dashboard)] flex-col lg:flex-row">
+        <aside className="border-b border-border px-6 py-4 lg:min-h-[calc(100vh-var(--header-height))] lg:w-[var(--sidebar-width)] lg:border-r lg:border-b-0 lg:px-5 lg:py-8">
           <nav
             aria-label="Studio navigation"
             className="flex gap-2 lg:flex-col"
           >
-            <Link className="nav-link" href="/dashboard">
+            <Link className={navLinkClass} href="/dashboard">
               <LayoutDashboard size={18} aria-hidden="true" />
               Overview
             </Link>
-            <Link className="nav-link" href="/profile">
+            <Link className={navLinkClass} href="/profile">
               <Settings size={18} aria-hidden="true" />
               Profile
             </Link>
             <span
-              className="nav-link cursor-not-allowed opacity-50"
+              className={cn(navLinkClass, "cursor-not-allowed opacity-50")}
               aria-disabled="true"
             >
               <Camera size={18} aria-hidden="true" />
@@ -58,3 +60,6 @@ export function DashboardShell({
     </div>
   );
 }
+
+const navLinkClass =
+  "inline-flex min-h-11 items-center gap-2.5 rounded-control px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-muted hover:text-foreground focus-visible:outline-3 focus-visible:outline-ring focus-visible:outline-offset-2";

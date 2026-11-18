@@ -12,6 +12,7 @@
 - `proxy.ts` refreshes cookie sessions in Next.js 16.
 - Server Actions implement sign-up, sign-in, sign-out, and profile persistence.
 - Zod validates all auth/profile input server-side.
+- `src/components/ui` contains the reusable shadcn-style visual primitives; `/internal/style-guide` previews them only outside production.
 
 ## Current routes
 

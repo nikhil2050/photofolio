@@ -364,6 +364,13 @@ Before considering a screen complete, verify:
 
 ## 13. How to extend this system
 
+## 14. Implementation convention
+
+- Shared tokens are defined in `src/app/globals.css` and exposed through Tailwind semantic utilities such as `bg-surface`, `text-muted-foreground`, and `border-border`.
+- Reusable shadcn-style primitives live in `src/components/ui`. Use them for buttons, form controls, feedback, cards, empty states, and page headers before writing page-specific markup.
+- The internal component preview is available only during development at `/internal/style-guide`; it is intentionally unavailable in production and must never be linked in public navigation.
+- Use the system font stacks already configured in the global theme unless the project deliberately adds self-hosted font assets. Do not add remote font requests solely for decoration.
+
 When a future feature requires a new component or pattern:
 
 1. Check whether an existing token or component already solves the need.

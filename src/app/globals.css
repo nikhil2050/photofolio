@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  /* Photofolio's semantic light theme. Do not use raw palette values in pages. */
   --background: #f7f5f0;
   --surface: #ffffff;
   --surface-muted: #efebe4;
@@ -12,7 +13,18 @@
   --input: #d8d2c8;
   --ring: #6f817e;
   --success: #456b56;
+  --warning: #926b35;
   --destructive: #a44840;
+
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+  --radius-image: 1.25rem;
+  --shadow-floating: 0 18px 50px rgb(36 36 33 / 8%);
+
+  --content-marketing: 80rem;
+  --content-dashboard: 75rem;
+  --sidebar-width: 15rem;
+  --header-height: 4rem;
 }
 
 @theme inline {
@@ -21,120 +33,53 @@
   --color-surface-muted: var(--surface-muted);
   --color-foreground: var(--foreground);
   --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-border: var(--border);
-  --font-sans: Arial, sans-serif;
-  --font-display: Georgia, serif;
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-destructive: var(--destructive);
+  --radius-control: var(--radius-control);
+  --radius-card: var(--radius-card);
+  --radius-image: var(--radius-image);
+  --shadow-floating: var(--shadow-floating);
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
 }
 
 * {
   border-color: var(--border);
 }
 
+html {
+  background: var(--background);
+}
+
 body {
+  min-width: 20rem;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.font-display {
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 .brand {
-  font-family: Georgia, serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.04em;
-}
-.button {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.625rem;
-  padding: 0.625rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease,
-    border-color 160ms ease;
-}
-.button:focus-visible,
-.field:focus-visible,
-.nav-link:focus-visible {
-  outline: 3px solid var(--ring);
-  outline-offset: 2px;
-}
-.button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-.button-primary {
-  background: var(--foreground);
-  color: white;
-}
-.button-primary:hover:not(:disabled) {
-  background: #45453f;
-}
-.button-secondary {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--foreground);
-}
-.button-secondary:hover {
-  background: var(--surface-muted);
-}
-.button-ghost {
-  min-height: 2.5rem;
-  padding-inline: 0.5rem;
-  color: var(--muted-foreground);
-}
-.button-ghost:hover {
-  color: var(--foreground);
-  background: var(--surface-muted);
-}
-.field-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-.field {
-  width: 100%;
-  border: 1px solid var(--input);
-  border-radius: 0.625rem;
-  background: var(--surface);
-  padding: 0.7rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-}
-.field::placeholder {
-  color: var(--muted-foreground);
-  opacity: 0.7;
-}
-.form-error {
-  border-left: 3px solid var(--destructive);
-  padding-left: 0.75rem;
-  color: var(--destructive);
-  font-size: 0.875rem;
-}
-.form-success {
-  border-left: 3px solid var(--success);
-  padding-left: 0.75rem;
-  color: var(--success);
-  font-size: 0.875rem;
-}
-.nav-link {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  gap: 0.625rem;
-  border-radius: 0.625rem;
-  padding: 0.625rem 0.75rem;
-  color: var(--muted-foreground);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-.nav-link:hover {
-  background: var(--surface-muted);
-  color: var(--foreground);
 }
 
 @media (prefers-reduced-motion: reduce) {

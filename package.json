@@ -12,12 +12,16 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.5.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "lucide-react": "^1.74.0",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "tailwind-merge": "^3.7.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
@@ -27,9 +31,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
-    "prettier": "^3.10.1",
+    "prettier": "^3.8.2",
     "tailwindcss": "4.3.3",
-    "typescript": "^5",
-    "prettier": "^3.8.2"
+    "typescript": "^5"
   }
 }

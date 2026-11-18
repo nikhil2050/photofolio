@@ -3,6 +3,9 @@
 import { useRef, useState } from "react";
 import { ImagePlus, LoaderCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { HelperText, Label, ValidationMessage } from "@/components/ui/form";
 
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
 
@@ -48,17 +51,15 @@ export function AvatarUpload({
   return (
     <div>
       <input name="avatarPath" type="hidden" value={path} readOnly />
-      <p className="field-label">
+      <Label>
         Studio logo or avatar{" "}
         <span className="font-normal text-muted-foreground">(optional)</span>
-      </p>
+      </Label>
       <div className="flex items-center gap-4">
-        <div className="flex size-14 items-center justify-center rounded-full bg-surface-muted text-sm font-semibold text-[var(--accent-strong)]">
-          {path ? "✓" : "PF"}
-        </div>
+        <Avatar initials={path ? "✓" : "PF"} />
         <div>
-          <button
-            className="button button-secondary"
+          <Button
+            variant="secondary"
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={status === "uploading"}
@@ -78,7 +79,7 @@ export function AvatarUpload({
                 Choose image
               </>
             )}
-          </button>
+          </Button>
           <input
             ref={inputRef}
             className="sr-only"
@@ -86,15 +87,11 @@ export function AvatarUpload({
             accept="image/png,image/jpeg,image/webp"
             onChange={(event) => upload(event.target.files?.[0])}
           />
-          <p className="mt-2 text-sm text-muted-foreground">
-            PNG, JPEG, or WebP; maximum 2 MB.
-          </p>
+          <HelperText>PNG, JPEG, or WebP; maximum 2 MB.</HelperText>
         </div>
       </div>
       {error ? (
-        <p className="form-error mt-3" role="alert">
-          {error}
-        </p>
+        <ValidationMessage className="mt-3">{error}</ValidationMessage>
       ) : null}
     </div>
   );

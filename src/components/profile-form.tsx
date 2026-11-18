@@ -4,6 +4,14 @@ import { useActionState } from "react";
 import { saveProfile, type ProfileFormState } from "@/app/actions/profile";
 import type { PhotographerProfile } from "@/lib/profile/repository";
 import { AvatarUpload } from "@/components/avatar-upload";
+import { Button } from "@/components/ui/button";
+import {
+  HelperText,
+  Label,
+  SuccessMessage,
+  ValidationMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 const initialState: ProfileFormState = {};
 
@@ -26,28 +34,22 @@ export function ProfileForm({
         initialPath={profile?.avatar_path ?? null}
       />
       <div>
-        <label className="field-label" htmlFor="displayName">
-          Studio or display name
-        </label>
-        <input
-          className="field"
+        <Label htmlFor="displayName">Studio or display name</Label>
+        <Input
           id="displayName"
           name="displayName"
           defaultValue={profile?.display_name}
           autoComplete="organization"
           required
         />
-        <p className="mt-2 text-sm text-muted-foreground">
-          This will appear on future client galleries.
-        </p>
+        <HelperText>This will appear on future client galleries.</HelperText>
       </div>
       <div>
-        <label className="field-label" htmlFor="contactPhone">
+        <Label htmlFor="contactPhone">
           Contact or WhatsApp number{" "}
           <span className="font-normal text-muted-foreground">(optional)</span>
-        </label>
-        <input
-          className="field"
+        </Label>
+        <Input
           id="contactPhone"
           name="contactPhone"
           defaultValue={profile?.contact_phone ?? ""}
@@ -56,12 +58,11 @@ export function ProfileForm({
         />
       </div>
       <div>
-        <label className="field-label" htmlFor="bookingUrl">
+        <Label htmlFor="bookingUrl">
           Booking link{" "}
           <span className="font-normal text-muted-foreground">(optional)</span>
-        </label>
-        <input
-          className="field"
+        </Label>
+        <Input
           id="bookingUrl"
           name="bookingUrl"
           type="url"
@@ -71,12 +72,11 @@ export function ProfileForm({
         />
       </div>
       <div>
-        <label className="field-label" htmlFor="bookingCtaLabel">
+        <Label htmlFor="bookingCtaLabel">
           Booking button label{" "}
           <span className="font-normal text-muted-foreground">(optional)</span>
-        </label>
-        <input
-          className="field"
+        </Label>
+        <Input
           id="bookingCtaLabel"
           name="bookingCtaLabel"
           defaultValue={profile?.booking_cta_label ?? "Book a shoot"}
@@ -84,22 +84,12 @@ export function ProfileForm({
         />
       </div>
       {state.error ? (
-        <p className="form-error" role="alert">
-          {state.error}
-        </p>
+        <ValidationMessage>{state.error}</ValidationMessage>
       ) : null}
-      {state.success ? (
-        <p className="form-success" role="status">
-          {state.success}
-        </p>
-      ) : null}
-      <button
-        className="button button-primary"
-        type="submit"
-        disabled={isPending}
-      >
+      {state.success ? <SuccessMessage>{state.success}</SuccessMessage> : null}
+      <Button type="submit" disabled={isPending}>
         {isPending ? "Saving…" : "Save profile"}
-      </button>
+      </Button>
     </form>
   );
 }
