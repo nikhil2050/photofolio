@@ -19,7 +19,7 @@
 - `/`: public marketing foundation
 - `/sign-up`, `/sign-in`: email/password authentication
 - `/auth/callback`: primary Supabase email-confirmation callback; `/auth/confirm` remains as a compatible alias for existing templates
-- `/dashboard`: authenticated, factual empty state
+- `/dashboard`: authenticated studio overview with an owner-scoped gallery count, first-visit empty state, profile action, and a recoverable load-error state
 - `/profile`: authenticated profile setup/editing with a live gallery-identity preview; a valid saved display name completes onboarding and leads to the dashboard
 
 ## Data and privacy

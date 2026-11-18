@@ -456,7 +456,7 @@ Suggested copy:
 
 ---
 
-# 6. Prompt — build the first protected dashboard and empty state
+# 6. Prompt — build the first protected dashboard and empty state ✅
 
 Read the shared brief and visual-system skill. Build the first real photographer dashboard, not a generic admin template.
 
