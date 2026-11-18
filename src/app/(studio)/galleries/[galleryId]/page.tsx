@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { CircleCheck, Images } from "lucide-react";
+import { GalleryPhotoUploader } from "@/components/galleries/gallery-photo-uploader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SuccessMessage } from "@/components/ui/form";
@@ -57,13 +58,14 @@ export default async function GalleryCreatedPage({
             <div>
               <h2 className="text-lg font-semibold">Ready for photographs</h2>
               <p className="mt-2 leading-7 text-muted-foreground">
-                Photo upload and organisation are the next gallery workflow.
-                This draft remains private while you prepare it.
+                This draft remains private while you prepare it. Add photographs
+                below when you are ready.
               </p>
             </div>
           </div>
         </CardContent>
       </Card>
+      <GalleryPhotoUploader galleryId={gallery.id} />
     </div>
   );
 }

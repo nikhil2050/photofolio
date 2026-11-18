@@ -7,6 +7,8 @@ type LogContext = {
   requestId?: string;
   route?: string;
   status?: number;
+  providerCode?: string;
+  failureStage?: string;
 };
 
 type LogLevel = "error" | "info" | "warn";

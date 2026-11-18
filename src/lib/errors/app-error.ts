@@ -5,7 +5,11 @@ export type AppErrorCode =
   | "GALLERIES_UNAVAILABLE"
   | "GALLERY_UNAVAILABLE"
   | "GALLERY_CREATE_FAILED"
-  | "STORAGE_UNAVAILABLE";
+  | "STORAGE_UNAVAILABLE"
+  | "PHOTO_CREATE_FAILED"
+  | "PHOTO_UNAVAILABLE"
+  | "PHOTO_UPDATE_FAILED"
+  | "PHOTO_DELETE_FAILED";
 
 /**
  * An expected failure with a safe message that can cross an application

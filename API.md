@@ -9,6 +9,17 @@ implemented locally in migration `202611180005` but awaits explicit deployment
 to the linked production project; it does not introduce an endpoint or public
 client access.
 
+## Private gallery upload routes
+
+These authenticated owner routes require migration `202611180005` to be
+applied. They never make a storage bucket or gallery record public.
+
+- `POST /api/galleries/:galleryId/photos/upload-intent`: validates untrusted metadata, creates a pending photo record, then returns a short-lived signed URL for one private original upload.
+- `POST /api/galleries/:galleryId/photos/:photoId/complete`: revalidates the uploaded bytes and decodability, auto-orients and strips metadata while creating private WebP preview and thumbnail files. It returns a protected preview route only after `ready`; it never returns an original URL.
+- `POST /api/galleries/:galleryId/photos/:photoId/retry`: repeats safe server-side derivative creation from a retained valid original without re-uploading.
+- `GET /api/galleries/:galleryId/photos/:photoId/preview`: checks ownership, then redirects to a 60-second signed thumbnail URL. It never serves originals.
+- `DELETE /api/galleries/:galleryId/photos/:photoId`: idempotently removes a queued/failed item and its private objects.
+
 ## Profile asset route
 
 - `POST /api/profile/avatar`: authenticated multipart upload for an optional photographer avatar or logo. The request must provide an `image` file that is PNG, JPEG, or WebP and no larger than 2 MB. The server validates the declared MIME type, file size, and matching image signature before writing a server-generated, owner-scoped path to the private `preview-images` bucket. It returns `{ "path": "..." }` on success, or a safe `{ "error": "...", "requestId": "..." }` response with an `x-request-id` header: `400` for invalid input, `401` when unauthenticated, or `500` for a storage failure.

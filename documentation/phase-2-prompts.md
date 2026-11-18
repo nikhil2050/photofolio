@@ -444,7 +444,7 @@ Acceptance criteria:
 
 ---
 
-# Prompt 3 — Secure multi-photo upload and image processing pipeline
+# Prompt 3 — Secure multi-photo upload and image processing pipeline ✅
 
 ```text
 Implement the gallery photo-upload workflow. This is a core product capability, so prioritise reliability, privacy and clear feedback over visual effects.

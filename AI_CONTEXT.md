@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompts 1–2 are locally complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. The Phase 2 gallery library and draft-creation routes are implemented locally but require migration `202611180005` before they can create or fully read galleries against the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
+**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompts 1–3 are locally complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. The Phase 2 gallery library, creation flow, and secure multi-photo upload flow require migration `202611180005` before they can run against the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
 
 ## Architecture
 
@@ -26,6 +26,7 @@
 - `/galleries`: authenticated gallery library with server-side search, status filters, pagination, real ready-photo counts, and empty/loading/error states
 - `/galleries/new`: authenticated short draft-gallery form
 - `/galleries/[galleryId]`: authenticated, owner-scoped confirmation/details screen for a created private draft
+- `/galleries/[galleryId]`: also provides owner-scoped multi-photo upload with a truthful queue, short-lived direct private upload URLs, server-side image validation, and short-lived owner preview access.
 - `/privacy`, `/terms`, `/copyright`: readable Phase 1 legal-information drafts with clearly marked operator and legal-review placeholders
 
 ## Data and privacy
@@ -40,6 +41,6 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 
 1. Run the documented hosted authentication, two-account RLS, storage, and responsive browser checks before declaring Phase 1 complete.
 2. Explicitly approve and apply `202611180005_phase_2_gallery_delivery_foundation.sql` to the linked production project, then generate `src/types/database.ts` from the applied schema.
-3. Execute Phase 2 Prompt 3: secure multi-photo upload and processing, after the migration is deployed.
-4. Run the documented two-account Phase 2 RLS and storage checks in a non-production Supabase project or branch.
+3. Apply `202611180005`, then manually verify upload, cancellation, retry, and two-account isolation against a non-production Supabase project or branch.
+4. Continue with Phase 2 Prompt 4 (photo library management) after the upload flow is accepted.
 5. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).
