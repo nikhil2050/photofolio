@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 foundation.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, and committed SQL migrations. A local environment still needs its own Supabase credentials.
+**IN_PROGRESS — Phase 1 acceptance review.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete.
 
 ## Architecture
 
@@ -13,6 +13,7 @@
 - Server Actions implement sign-up, sign-in, sign-out, and profile persistence. `getClaims()` verifies the authenticated identity on the server before protected data is read. A server-validated profile-image route stores optional avatars in an owner-scoped private path.
 - Zod validates all auth/profile input server-side.
 - `src/components/ui` contains the reusable shadcn-style visual primitives; `/internal/style-guide` previews them only outside production. `src/lib/errors` and `src/lib/logging` provide safe typed failures and structured server logs.
+- Vitest covers pure validation, safe redirects, and environment boundaries. Hosted Supabase and browser acceptance procedures live in `documentation/phase-1-acceptance.md`.
 
 ## Current routes
 
@@ -33,7 +34,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 
 ## Next planned work
 
-1. Run the documented two-account storage RLS checks before enabling gallery delivery.
+1. Run the documented hosted authentication, two-account RLS, storage, and responsive browser checks before declaring Phase 1 complete.
 2. Generate `src/types/database.ts` from the applied remote schema.
 3. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).
 4. Begin Phase 2 gallery delivery only after pilot validation.

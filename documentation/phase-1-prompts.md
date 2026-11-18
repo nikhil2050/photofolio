@@ -657,7 +657,7 @@ Use plain language. Do not imply that submitting a form automatically proves inf
 
 ---
 
-# 10. Prompt — complete Phase 1 integration and acceptance testing
+# 10. Prompt — complete Phase 1 integration and acceptance testing 🟡
 
 Read the shared brief and the visual-system skill. Review all Phase 1 work as one connected product, not as isolated tickets.
 

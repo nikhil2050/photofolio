@@ -6,11 +6,26 @@ Coding Agent - Codex
 
 ## Local setup
 
+Prerequisite: Node.js 22.12 or later (required by the test runner) and npm.
+
 1. Install dependencies: `npm install`
 2. Copy `.env.example` to `.env.local` and add the URL and publishable key from your Supabase project.
 3. Link the project and apply all committed migrations with the Supabase CLI (for example, `npx supabase db push`).
 4. In Supabase Auth, add `http://localhost:3000/auth/callback` to the permitted redirect URLs for email confirmation. Keep `http://localhost:3000/auth/confirm` while migrating an existing confirmation-email template; the app supports both paths.
 5. Run `npm run dev`.
+
+## Quality checks
+
+```bash
+npm test
+npm run typecheck
+npm run lint
+npm run format:check
+npx next build --webpack
+```
+
+See [phase-1-acceptance.md](documentation/phase-1-acceptance.md) for the
+hosted Supabase integration checks that require disposable accounts.
 
 The migrations create private `original-photos` and `preview-images` buckets. Do not make either bucket public; see [storage-security.md](documentation/storage-security.md) for key conventions and verification.
 

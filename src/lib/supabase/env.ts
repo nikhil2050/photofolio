@@ -10,12 +10,19 @@ const publicEnvSchema = z.object({
     .min(1, "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is required."),
 });
 
+type PublicEnvironment = {
+  NEXT_PUBLIC_SUPABASE_URL?: string;
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?: string;
+};
+
 /** Validates only variables explicitly safe to bundle in browser code. */
-export function validatePublicEnv() {
+export function validatePublicEnv(
+  environment: PublicEnvironment = process.env as PublicEnvironment,
+) {
   const parsed = publicEnvSchema.safeParse({
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_URL: environment.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+      environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   });
 
   if (!parsed.success) {

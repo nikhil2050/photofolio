@@ -6,15 +6,16 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { LegalLinks } from "@/components/layout/legal-links";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-8">
         <span className="brand">Photofolio</span>
-        <Link className="button button-secondary" href="/sign-in">
-          Sign in
-        </Link>
+        <Button variant="secondary" size="small" asChild>
+          <Link href="/sign-in">Sign in</Link>
+        </Button>
       </header>
       <section className="mx-auto grid max-w-7xl gap-12 px-6 pb-20 pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:pb-28 lg:pt-24">
         <div className="max-w-2xl">
@@ -29,13 +30,14 @@ export default function Home() {
             beautiful client galleries tomorrow.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link className="button button-primary" href="/sign-up">
-              Create your studio{" "}
-              <ArrowUpRight className="ml-2" size={18} aria-hidden="true" />
-            </Link>
-            <a className="button button-secondary" href="#how-it-works">
-              See how it works
-            </a>
+            <Button size="large" asChild>
+              <Link href="/sign-up">
+                Create your studio <ArrowUpRight size={18} aria-hidden="true" />
+              </Link>
+            </Button>
+            <Button variant="secondary" size="large" asChild>
+              <a href="#how-it-works">See how it works</a>
+            </Button>
           </div>
         </div>
         <div
@@ -47,9 +49,9 @@ export default function Home() {
               Your studio, quietly present
             </p>
             <div className="mt-8 grid grid-cols-3 gap-3" aria-hidden="true">
-              <div className="h-28 rounded-lg bg-[#cdb8a5]" />
-              <div className="h-28 rounded-lg bg-[#9ba6a0]" />
-              <div className="h-28 rounded-lg bg-[#b7785c]" />
+              <div className="h-28 rounded-control bg-surface" />
+              <div className="h-28 rounded-control bg-border" />
+              <div className="h-28 rounded-control bg-accent/40" />
             </div>
             <div className="mt-6 flex items-center justify-between border-t border-border pt-5">
               <div>
