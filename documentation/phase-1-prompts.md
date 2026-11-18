@@ -158,7 +158,7 @@ Do not add unnecessary dependencies. Do not hardcode secrets. Do not claim Supab
 
 ---
 
-# 2. Prompt — implement the shared visual system and reusable UI foundations
+# 2. Prompt — implement the shared visual system and reusable UI foundations ✅
 
 Read `.agents/skills/photofolio-visual-system/SKILL.md` and use it as the authoritative design reference.
 
