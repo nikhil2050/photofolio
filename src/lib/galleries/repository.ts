@@ -5,6 +5,8 @@ import type {
   GalleryInput,
   GalleryListFilters,
 } from "@/lib/validation/gallery";
+import { createShareToken, hashGalleryPassword, hashShareToken } from "@/lib/galleries/share-security";
+import type { AccessMode } from "@/lib/validation/gallery-sharing";
 
 const GALLERY_PAGE_SIZE = 24;
 
@@ -32,6 +34,22 @@ export type OwnedGallery = Pick<
   description: string | null;
   event_date: string | null;
   location: string | null;
+};
+
+export type GallerySharingState = {
+  status: "draft" | "published" | "archived";
+  accessMode: AccessMode;
+  publishedAt: string | null;
+  hasShareLink: boolean;
+  shareTokenVersion: number;
+};
+
+export type PublishReadiness = {
+  canPublish: boolean;
+  issues: string[];
+  readyPhotoCount: number;
+  processingPhotoCount: number;
+  failedPhotoCount: number;
 };
 
 /**
@@ -209,6 +227,114 @@ export async function setOwnedGalleryCover(
     .select("id")
     .maybeSingle();
   if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not update the cover photograph.");
+  return Boolean(data);
+}
+
+/** Reads only owner-safe sharing metadata; never return token or password hashes. */
+export async function getGallerySharingState(profileId: string, galleryId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("galleries")
+    .select("status, access_mode, published_at, share_token_hash, share_token_version")
+    .eq("id", galleryId)
+    .eq("photographer_profile_id", profileId)
+    .maybeSingle();
+  if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not load sharing settings.");
+  if (!data) return null;
+  return {
+    status: data.status as GallerySharingState["status"],
+    accessMode: data.access_mode as AccessMode,
+    publishedAt: data.published_at as string | null,
+    hasShareLink: Boolean(data.share_token_hash),
+    shareTokenVersion: data.share_token_version as number,
+  } satisfies GallerySharingState;
+}
+
+/** Publishing requirements are calculated from real private data, not UI state. */
+export async function getGalleryPublishReadiness(profileId: string, galleryId: string): Promise<PublishReadiness | null> {
+  const supabase = await createClient();
+  const [{ data: gallery, error: galleryError }, { data: profile, error: profileError }, { data: photos, error: photosError }] = await Promise.all([
+    supabase.from("galleries").select("title").eq("id", galleryId).eq("photographer_profile_id", profileId).maybeSingle(),
+    supabase.from("photographer_profiles").select("display_name, whatsapp_number, booking_cta_url").eq("id", profileId).maybeSingle(),
+    supabase.from("photos").select("processing_status").eq("gallery_id", galleryId),
+  ]);
+  if (galleryError || profileError || photosError) throw new AppError("GALLERY_UNAVAILABLE", "We could not check publishing readiness.");
+  if (!gallery || !profile) return null;
+  const statuses = (photos ?? []).map((photo) => photo.processing_status as string);
+  const readyPhotoCount = statuses.filter((status) => status === "ready").length;
+  const processingPhotoCount = statuses.filter((status) => status === "pending" || status === "processing").length;
+  const failedPhotoCount = statuses.filter((status) => status === "failed").length;
+  const issues: string[] = [];
+  if (!gallery.title.trim()) issues.push("Add a gallery title.");
+  if (readyPhotoCount === 0) issues.push("Add at least one processed photograph.");
+  if (processingPhotoCount > 0) issues.push("Wait for all photographs to finish processing.");
+  if (failedPhotoCount > 0) issues.push("Retry or remove failed photographs before publishing.");
+  if (!profile.display_name?.trim()) issues.push("Add your studio display name in Profile.");
+  if (!profile.whatsapp_number && !profile.booking_cta_url) issues.push("Add a WhatsApp number or booking link in Profile so clients can contact you.");
+  return { canPublish: issues.length === 0, issues, readyPhotoCount, processingPhotoCount, failedPhotoCount };
+}
+
+export async function publishOwnedGallery(input: { profileId: string; galleryId: string; accessMode: AccessMode; password?: string }) {
+  const readiness = await getGalleryPublishReadiness(input.profileId, input.galleryId);
+  if (!readiness || !readiness.canPublish) return { readiness, shareToken: null };
+  const supabase = await createClient();
+  const { data: gallery, error: readError } = await supabase
+    .from("galleries")
+    .select("status, share_token_hash, share_token_version")
+    .eq("id", input.galleryId)
+    .eq("photographer_profile_id", input.profileId)
+    .single();
+  if (readError || !gallery) throw new AppError("GALLERY_UNAVAILABLE", "We could not publish this gallery.");
+  // Only a hash is persisted, so an existing raw token cannot be recovered.
+  // Preserve it on republish; the owner can explicitly rotate to get a new URL.
+  const shareToken = gallery.share_token_hash ? null : createShareToken();
+  const passwordHash = input.accessMode === "password" && input.password ? await hashGalleryPassword(input.password) : null;
+  const { error } = await supabase.from("galleries").update({
+    status: "published",
+    access_mode: input.accessMode,
+    password_hash: passwordHash,
+    share_token_hash: shareToken ? hashShareToken(shareToken) : gallery.share_token_hash,
+    share_token_version: shareToken ? (gallery.share_token_version as number) + 1 : gallery.share_token_version,
+    published_at: new Date().toISOString(),
+    archived_at: null,
+  }).eq("id", input.galleryId).eq("photographer_profile_id", input.profileId);
+  if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not publish this gallery.");
+  return { readiness, shareToken };
+}
+
+export async function updateOwnedGalleryAccess(input: { profileId: string; galleryId: string; accessMode: AccessMode; password?: string }) {
+  const supabase = await createClient();
+  const passwordHash = input.accessMode === "password" && input.password ? await hashGalleryPassword(input.password) : null;
+  const { data, error } = await supabase.from("galleries").update({
+    access_mode: input.accessMode,
+    password_hash: passwordHash,
+  }).eq("id", input.galleryId).eq("photographer_profile_id", input.profileId).select("id").maybeSingle();
+  if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not update sharing access.");
+  return Boolean(data);
+}
+
+export async function rotateOwnedGalleryShareLink(profileId: string, galleryId: string) {
+  const supabase = await createClient();
+  const { data: gallery, error: readError } = await supabase.from("galleries").select("status, share_token_version").eq("id", galleryId).eq("photographer_profile_id", profileId).maybeSingle();
+  if (readError) throw new AppError("GALLERY_UNAVAILABLE", "We could not rotate the share link.");
+  if (!gallery || gallery.status !== "published") return null;
+  const shareToken = createShareToken();
+  const { error } = await supabase.from("galleries").update({ share_token_hash: hashShareToken(shareToken), share_token_version: (gallery.share_token_version as number) + 1 }).eq("id", galleryId).eq("photographer_profile_id", profileId);
+  if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not rotate the share link.");
+  return shareToken;
+}
+
+export async function unpublishOwnedGallery(profileId: string, galleryId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("galleries").update({ status: "draft" }).eq("id", galleryId).eq("photographer_profile_id", profileId).select("id").maybeSingle();
+  if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not disable sharing.");
+  return Boolean(data);
+}
+
+export async function archiveOwnedGallery(profileId: string, galleryId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("galleries").update({ status: "archived", share_token_hash: null, archived_at: new Date().toISOString() }).eq("id", galleryId).eq("photographer_profile_id", profileId).select("id").maybeSingle();
+  if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not archive this gallery.");
   return Boolean(data);
 }
 

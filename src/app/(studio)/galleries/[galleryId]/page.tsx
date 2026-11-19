@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { CircleCheck, LockKeyhole } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 import { GalleryDetailsForm } from "@/components/galleries/gallery-details-form";
 import { GalleryEditorNavigation } from "@/components/galleries/gallery-editor-navigation";
 import { GalleryPhotoGrid } from "@/components/galleries/gallery-photo-grid";
+import { GallerySharePanel } from "@/components/galleries/gallery-share-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { SuccessMessage } from "@/components/ui/form";
 import { PageHeader } from "@/components/ui/page-header";
 import { requireUser } from "@/lib/auth/require-user";
-import { getOwnedGallery } from "@/lib/galleries/repository";
+import { getGalleryPublishReadiness, getGallerySharingState, getOwnedGallery } from "@/lib/galleries/repository";
 import { getProfile } from "@/lib/profile/repository";
 import { listOwnedGalleryPhotos } from "@/lib/photos/repository";
 
@@ -29,9 +29,11 @@ export default async function GalleryCreatedPage({
   const profile = await getProfile(user.id);
   if (!profile?.setup_completed_at) redirect("/profile");
 
-  const [gallery, photos] = await Promise.all([
+  const [gallery, photos, sharing, readiness] = await Promise.all([
     getOwnedGallery(profile.id, galleryId),
     listOwnedGalleryPhotos(profile.id, galleryId),
+    getGallerySharingState(profile.id, galleryId),
+    getGalleryPublishReadiness(profile.id, galleryId),
   ]);
   if (!gallery) notFound();
 
@@ -58,9 +60,7 @@ export default async function GalleryCreatedPage({
         <h2 id="photos-editor-heading" className="sr-only">Photos</h2>
         <GalleryPhotoGrid key={photos.map((photo) => `${photo.id}:${photo.processing_status}:${photo.sort_order}`).join("|")} galleryId={gallery.id} initialPhotos={photos} coverPhotoId={gallery.cover_photo_id} />
       </section>
-      <section id="sharing" className="mt-12 max-w-2xl" aria-labelledby="sharing-heading">
-        <Card><CardContent><div className="flex gap-3"><LockKeyhole className="mt-0.5 text-muted-foreground" size={20} aria-hidden="true" /><div><h2 id="sharing-heading" className="font-semibold">Sharing</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">This gallery is still private. Publishing and secure client sharing are the next gallery workflow.</p></div></div></CardContent></Card>
-      </section>
+      {sharing && readiness ? <GallerySharePanel galleryId={gallery.id} initialState={sharing} readiness={readiness} /> : null}
     </div>
   );
 }

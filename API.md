@@ -26,6 +26,10 @@ applied. They never make a storage bucket or gallery record public.
 - `PATCH /api/galleries/:galleryId/photos/:photoId`: authenticated owner only. Validates optional `altText` (500 characters) and `caption` (1,000 characters); neither can update another gallery's photo.
 - `POST /api/galleries/:galleryId/photos/reorder`: authenticated owner only. Accepts `{ "photoIds": ["uuid", "..."] }` containing every photo in the gallery exactly once. The `reorder_gallery_photos` database function serialises the operation and persists stable positions. Returns `400`, `401`, `404`, or `500` safely on failure.
 
+## Gallery sharing route
+
+- `POST /api/galleries/:galleryId/sharing`: authenticated owner only. Supports `publish`, `update-access`, `rotate-link`, `unpublish`, and `archive` actions. Publishing calculates readiness from the owner profile and all photo processing states; it creates an opaque 256-bit link token and persists only its SHA-256 hash. Password mode accepts a minimum eight-character password and persists only an scrypt hash. The response returns a raw share URL only when a token is newly created or rotated; it is never logged or stored in readable form. `400`, `401`, `404`, `422`, and safe `500` errors are returned as applicable.
+
 ## Profile asset route
 
 - `POST /api/profile/avatar`: authenticated multipart upload for an optional photographer avatar or logo. The request must provide an `image` file that is PNG, JPEG, or WebP and no larger than 2 MB. The server validates the declared MIME type, file size, and matching image signature before writing a server-generated, owner-scoped path to the private `preview-images` bucket. It returns `{ "path": "..." }` on success, or a safe `{ "error": "...", "requestId": "..." }` response with an `x-request-id` header: `400` for invalid input, `401` when unauthenticated, or `500` for a storage failure.

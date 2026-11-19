@@ -2,7 +2,7 @@ Coding Agent - Codex
 
 # Photofolio
 
-> **Implementation status:** Phase 1 acceptance is in progress. Authentication, protected studio routes, photographer profile onboarding, private-storage foundations, and local Phase 2 gallery creation, upload, and editor workflows are implemented. Apply all committed Supabase migrations before using gallery features. Image processing uses `sharp` to generate private, metadata-free WebP derivatives; originals remain private.
+> **Implementation status:** Phase 1 acceptance is in progress. Authentication, protected studio routes, photographer profile onboarding, private-storage foundations, and local Phase 2 gallery creation, upload, editor, and owner publishing workflows are implemented. Apply all committed Supabase migrations before using gallery features. Image processing uses `sharp` to generate private, metadata-free WebP derivatives; originals remain private.
 
 ## Local setup
 

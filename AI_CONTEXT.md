@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompts 1–4 are locally complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. The Phase 2 gallery editor and photo workflow require migrations `202611180005` and `202611180006` before they can run against the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
+**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompts 1–5 are locally complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. The Phase 2 gallery editor, publishing readiness, and owner sharing workflow require the committed Phase 2 migrations before they can run against the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
 
 ## Architecture
 
@@ -28,6 +28,7 @@
 - `/galleries/[galleryId]`: authenticated, owner-scoped confirmation/details screen for a created private draft
 - `/galleries/[galleryId]`: also provides owner-scoped multi-photo upload with a truthful queue, short-lived direct private upload URLs, server-side image validation, and short-lived owner preview access.
 - `/galleries/[galleryId]`: gallery editor with deliberate metadata saves, an owner-scoped photo grid, accessible selection/reordering, cover selection, photo metadata editing, and confirmed photo deletion.
+- `/galleries/[galleryId]`: owner-only publishing and sharing controls with readiness feedback, unlisted link/password modes, link rotation, unpublishing, and archiving. Public client-gallery rendering remains Prompt 6.
 - `/privacy`, `/terms`, `/copyright`: readable Phase 1 legal-information drafts with clearly marked operator and legal-review placeholders
 
 ## Data and privacy
@@ -43,5 +44,5 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 1. Run the documented hosted authentication, two-account RLS, storage, and responsive browser checks before declaring Phase 1 complete.
 2. Explicitly approve and apply `202611180005_phase_2_gallery_delivery_foundation.sql` to the linked production project, then generate `src/types/database.ts` from the applied schema.
 3. Apply `202611180005` and `202611180006`, then manually verify upload, editing, reorder, deletion, and two-account isolation against a non-production Supabase project or branch.
-4. Continue with Phase 2 Prompt 5 (secure gallery publishing and sharing) after the editor workflow is accepted.
+4. Continue with Phase 2 Prompt 6 (client-facing gallery and photo lightbox) after the publishing workflow is accepted.
 5. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).

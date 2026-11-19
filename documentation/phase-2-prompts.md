@@ -616,7 +616,7 @@ F. Acceptance criteria
 
 ---
 
-# Prompt 5 — Secure gallery sharing, publishing and access management
+# Prompt 5 — Secure gallery sharing, publishing and access management ✅
 
 ```text
 Implement publishing and secure sharing for a photographer's gallery.
