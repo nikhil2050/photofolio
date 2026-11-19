@@ -12,7 +12,13 @@ import { hasExpectedFileExtension, mimeTypeFromImageSignature } from "@/lib/vali
 type Status = "queued" | "uploading" | "processing" | "ready" | "failed";
 type QueueItem = { localId: string; file: File; preview: string; status: Status; progress: number; photoId?: string; error?: string; previewUrl?: string };
 
-export function GalleryPhotoUploader({ galleryId }: { galleryId: string }) {
+export function GalleryPhotoUploader({
+  galleryId,
+  onUploadComplete,
+}: {
+  galleryId: string;
+  onUploadComplete?: () => void;
+}) {
   const [items, setItems] = useState<QueueItem[]>([]);
   const running = useRef(0);
   const itemsRef = useRef(items);
@@ -48,6 +54,7 @@ export function GalleryPhotoUploader({ galleryId }: { galleryId: string }) {
       const complete = await fetch(`/api/galleries/${galleryId}/photos/${intentBody.photoId}/complete`, { method: "POST" });
       const completeBody = await complete.json(); if (!complete.ok) throw new Error(completeBody.error ?? "Processing failed.");
       update(item.localId, { status: "ready", previewUrl: completeBody.previewUrl });
+      onUploadComplete?.();
     } catch (error) { update(item.localId, { status: "failed", error: error instanceof Error ? error.message : "This upload failed." }); }
   };
   const retry = async (item: QueueItem) => {
@@ -56,6 +63,7 @@ export function GalleryPhotoUploader({ galleryId }: { galleryId: string }) {
     const response = await fetch(`/api/galleries/${galleryId}/photos/${item.photoId}/retry`, { method: "POST" });
     const body = await response.json();
     update(item.localId, response.ok ? { status: "ready", previewUrl: body.previewUrl } : { status: "failed", error: body.error ?? "Processing failed." });
+    if (response.ok) onUploadComplete?.();
   };
   const remove = async (item: QueueItem) => {
     if (item.photoId) await fetch(`/api/galleries/${galleryId}/photos/${item.photoId}`, { method: "DELETE" });

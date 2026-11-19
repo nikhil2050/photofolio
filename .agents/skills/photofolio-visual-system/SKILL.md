@@ -398,6 +398,7 @@ These rules extend the shared system for Gallery Management & Client Delivery. T
 ### Gallery editor and uploads
 
 - Group editor tasks into Details, Photos and Sharing. Do not add navigation for features that do not exist.
+- For a long editor page, use compact, keyboard-accessible anchor links for Details, Photos and Sharing. The active section must have a text-and-contrast state; anchors must still work when JavaScript is unavailable.
 - Upload dropzones use a thin dashed border, one outline upload icon and short helper copy. Avoid full-panel gradients or oversized illustrations.
 - Upload rows should be compact and readable: small preview, filename, progress/status and one contextual action.
 - Use distinct but restrained visual states for uploading, processing, ready and failed. Progress must reflect real work; never animate a fake percentage.

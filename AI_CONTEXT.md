@@ -2,7 +2,7 @@
 
 ## Status
 
-**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompts 1–3 are locally complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. The Phase 2 gallery library, creation flow, and secure multi-photo upload flow require migration `202611180005` before they can run against the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
+**IN_PROGRESS — Phase 1 acceptance review; Phase 2 Prompts 1–4 are locally complete.** The repository contains the App Router foundation, Supabase SSR auth integration, photographer profile flow, protected dashboard, legal-information drafts, and committed SQL migrations. Hosted two-account and browser acceptance checks remain before Phase 1 can be declared complete. The Phase 2 gallery editor and photo workflow require migrations `202611180005` and `202611180006` before they can run against the linked production Supabase project. See `documentation/phase-2-audit.md` and `documentation/database-model.md`.
 
 ## Architecture
 
@@ -27,11 +27,12 @@
 - `/galleries/new`: authenticated short draft-gallery form
 - `/galleries/[galleryId]`: authenticated, owner-scoped confirmation/details screen for a created private draft
 - `/galleries/[galleryId]`: also provides owner-scoped multi-photo upload with a truthful queue, short-lived direct private upload URLs, server-side image validation, and short-lived owner preview access.
+- `/galleries/[galleryId]`: gallery editor with deliberate metadata saves, an owner-scoped photo grid, accessible selection/reordering, cover selection, photo metadata editing, and confirmed photo deletion.
 - `/privacy`, `/terms`, `/copyright`: readable Phase 1 legal-information drafts with clearly marked operator and legal-review placeholders
 
 ## Data and privacy
 
-`supabase/migrations/202611180001_phase_1_foundation.sql` creates the original RLS-protected foundation and private storage buckets. `202611180002_grant_authenticated_table_access.sql` explicitly grants the signed-in Data API role required operations because automatic table exposure is disabled. `202611180003_expand_application_data_model.sql` establishes the six-entity model: users, photographer profiles, galleries, photos, favourites, and inquiries. `202611180004_secure_private_photo_storage.sql` is applied and hardens private object-key policies for owner-and-gallery access. `202611180005_phase_2_gallery_delivery_foundation.sql` is locally validated and pending remote application; it adds access-secret hashes, photo processing fields, gallery-scoped favourites, integrity constraints, thumbnail policy support, and original-bucket limits without opening client access. See `documentation/database-model.md` and `documentation/storage-security.md` for verification guidance.
+`supabase/migrations/202611180001_phase_1_foundation.sql` creates the original RLS-protected foundation and private storage buckets. `202611180002_grant_authenticated_table_access.sql` explicitly grants the signed-in Data API role required operations because automatic table exposure is disabled. `202611180003_expand_application_data_model.sql` establishes the six-entity model: users, photographer profiles, galleries, photos, favourites, and inquiries. `202611180004_secure_private_photo_storage.sql` is applied and hardens private object-key policies for owner-and-gallery access. `202611180005_phase_2_gallery_delivery_foundation.sql` adds access-secret hashes, photo processing fields, gallery-scoped favourites, integrity constraints, thumbnail policy support, and original-bucket limits without opening client access. `202611180006_photo_organisation.sql` adds the owner-scoped transactional reorder function, and `202611190007_fix_photo_reorder_temporary_positions.sql` repairs its safe temporary ordering strategy for already-migrated projects. Phase 2 migrations require remote application. See `documentation/database-model.md` and `documentation/storage-security.md` for verification guidance.
 
 ## Required environment variables
 
@@ -41,6 +42,6 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT
 
 1. Run the documented hosted authentication, two-account RLS, storage, and responsive browser checks before declaring Phase 1 complete.
 2. Explicitly approve and apply `202611180005_phase_2_gallery_delivery_foundation.sql` to the linked production project, then generate `src/types/database.ts` from the applied schema.
-3. Apply `202611180005`, then manually verify upload, cancellation, retry, and two-account isolation against a non-production Supabase project or branch.
-4. Continue with Phase 2 Prompt 4 (photo library management) after the upload flow is accepted.
+3. Apply `202611180005` and `202611180006`, then manually verify upload, editing, reorder, deletion, and two-account isolation against a non-production Supabase project or branch.
+4. Continue with Phase 2 Prompt 5 (secure gallery publishing and sharing) after the editor workflow is accepted.
 5. Verify the Supabase Auth redirect URLs include `/auth/callback` (and `/auth/confirm` while an older email template remains active).

@@ -27,7 +27,7 @@ export type GalleryListResult = {
 
 export type OwnedGallery = Pick<
   GalleryListItem,
-  "id" | "title" | "client_name" | "status" | "updated_at"
+  "id" | "title" | "client_name" | "status" | "updated_at" | "cover_photo_id"
 > & {
   description: string | null;
   event_date: string | null;
@@ -137,7 +137,7 @@ export async function getOwnedGallery(
   const { data, error } = await supabase
     .from("galleries")
     .select(
-      "id, title, client_name, status, updated_at, description, event_date, location",
+      "id, title, client_name, status, updated_at, cover_photo_id, description, event_date, location",
     )
     .eq("id", galleryId)
     .eq("photographer_profile_id", photographerProfileId)
@@ -155,6 +155,61 @@ export async function getOwnedGallery(
   }
 
   return data as OwnedGallery | null;
+}
+
+/** Updates only editor fields; ownership is enforced again by RLS and profile ID. */
+export async function updateOwnedGallery(
+  photographerProfileId: string,
+  galleryId: string,
+  input: GalleryInput,
+) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("galleries")
+    .update({
+      title: input.title,
+      client_name: input.clientName ?? null,
+      description: input.description ?? null,
+      event_date: input.eventDate ?? null,
+      location: input.location ?? null,
+    })
+    .eq("id", galleryId)
+    .eq("photographer_profile_id", photographerProfileId)
+    .select("id")
+    .maybeSingle();
+  if (error) {
+    logger.error("galleries.update_failed", { errorCode: "GALLERY_UNAVAILABLE", operation: "gallery_update" });
+    throw new AppError("GALLERY_UNAVAILABLE", "We could not save this gallery.");
+  }
+  return Boolean(data);
+}
+
+export async function setOwnedGalleryCover(
+  photographerProfileId: string,
+  galleryId: string,
+  photoId: string | null,
+) {
+  const supabase = await createClient();
+  if (photoId) {
+    const { data: photo, error: photoError } = await supabase
+      .from("photos")
+      .select("id")
+      .eq("id", photoId)
+      .eq("gallery_id", galleryId)
+      .eq("processing_status", "ready")
+      .maybeSingle();
+    if (photoError) throw new AppError("PHOTO_UNAVAILABLE", "We could not update the cover photograph.");
+    if (!photo) return false;
+  }
+  const { data, error } = await supabase
+    .from("galleries")
+    .update({ cover_photo_id: photoId })
+    .eq("id", galleryId)
+    .eq("photographer_profile_id", photographerProfileId)
+    .select("id")
+    .maybeSingle();
+  if (error) throw new AppError("GALLERY_UNAVAILABLE", "We could not update the cover photograph.");
+  return Boolean(data);
 }
 
 async function getReadyPhotoCounts(galleryIds: string[]) {

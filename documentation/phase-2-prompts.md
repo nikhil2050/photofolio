@@ -533,7 +533,7 @@ G. Acceptance criteria
 
 ---
 
-# Prompt 4 — Photo grid, organisation and gallery editor
+# Prompt 4 — Photo grid, organisation and gallery editor ✅
 
 ```text
 Build the photographer's gallery editor and photo-organisation workflow.

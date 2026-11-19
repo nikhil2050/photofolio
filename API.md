@@ -17,8 +17,14 @@ applied. They never make a storage bucket or gallery record public.
 - `POST /api/galleries/:galleryId/photos/upload-intent`: validates untrusted metadata, creates a pending photo record, then returns a short-lived signed URL for one private original upload.
 - `POST /api/galleries/:galleryId/photos/:photoId/complete`: revalidates the uploaded bytes and decodability, auto-orients and strips metadata while creating private WebP preview and thumbnail files. It returns a protected preview route only after `ready`; it never returns an original URL.
 - `POST /api/galleries/:galleryId/photos/:photoId/retry`: repeats safe server-side derivative creation from a retained valid original without re-uploading.
-- `GET /api/galleries/:galleryId/photos/:photoId/preview`: checks ownership, then redirects to a 60-second signed thumbnail URL. It never serves originals.
+- `GET /api/galleries/:galleryId/photos/:photoId/preview`: checks ownership, then redirects to a 60-second signed URL for the controlled thumbnail (or legacy controlled preview fallback). It never serves originals. The redirect is private and not cached.
 - `DELETE /api/galleries/:galleryId/photos/:photoId`: idempotently removes a queued/failed item and its private objects.
+
+## Gallery editor routes
+
+- `PATCH /api/galleries/:galleryId`: authenticated owner only. Validates and saves title, client/event label, description, event date, and location. With `{ "action": "set-cover", "photoId": "..." }`, it accepts only a ready photograph belonging to the same gallery as the cover. Returns `{ "status": "saved" }`; validation failures return a safe `400` response with per-field `fieldErrors`, and ownership/server failures return `401`, `404`, or `500`.
+- `PATCH /api/galleries/:galleryId/photos/:photoId`: authenticated owner only. Validates optional `altText` (500 characters) and `caption` (1,000 characters); neither can update another gallery's photo.
+- `POST /api/galleries/:galleryId/photos/reorder`: authenticated owner only. Accepts `{ "photoIds": ["uuid", "..."] }` containing every photo in the gallery exactly once. The `reorder_gallery_photos` database function serialises the operation and persists stable positions. Returns `400`, `401`, `404`, or `500` safely on failure.
 
 ## Profile asset route
 

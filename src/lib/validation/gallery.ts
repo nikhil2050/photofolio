@@ -28,6 +28,9 @@ export const gallerySchema = z.object({
 
 export type GalleryInput = z.infer<typeof gallerySchema>;
 
+/** The editor deliberately reuses the creation constraints for updates. */
+export const galleryDetailsSchema = gallerySchema;
+
 export const galleryStatusSchema = z.enum([
   "all",
   "draft",
